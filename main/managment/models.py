@@ -17,16 +17,16 @@ class CustomUserManagers(BaseUserManager):
         user = self.create_user(username, email, password)
         user.is_staff = True
         user.is_superuser = True
-        user.is_active = True  # Superusers are active by default
+        user.is_active = True  
         user.save(using=self._db)
         return user
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(unique=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)  # Define date_joined
+    date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManagers()
 

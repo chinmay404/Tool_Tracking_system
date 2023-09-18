@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import  os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -48,6 +48,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # user Added Middelware
+    'main.middleware.AuthenticationMiddleware',  #Custom Auth
+    'main.middleware.SessionTimeoutMiddleware', #Session Expiray
+    
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -55,7 +59,7 @@ ROOT_URLCONF = 'main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,7 +84,7 @@ DATABASES = {
         'NAME': 'tool_tracking',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',  # Set the database host (usually 'localhost' for local development)
+        'HOST': 'localhost',  
         'PORT': '5432',           
     }
 }
@@ -128,6 +132,9 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# settings.py
+
 AUTH_USER_MODEL = 'managment.CustomUser'
 
+
+# Auto Logout (In SEC)
+SESSION_COOKIE_AGE = 30   # 30 minutes (30 * 60 seconds)
