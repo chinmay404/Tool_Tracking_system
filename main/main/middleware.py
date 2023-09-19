@@ -16,15 +16,15 @@ class AuthenticationMiddleware:
     
 # AUTO LOGOUT AFTER SESSION EXPIERY
 
-class SessionTimeoutMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
+# class SessionTimeoutMiddleware:
+#     def __init__(self, get_response):
+#         self.get_response = get_response
 
-    def __call__(self, request):
+#     def __call__(self, request):
 
-        if request.user.is_authenticated:
-            if request.session.get_expiry_age() <= 0:
-                print(request.session.get_expiry_age())
-                logout_view(request)  # Log out the user if the session has expired
-        response = self.get_response(request)
-        return response
+#         if request.user.is_authenticated:
+#             if request.session.get_expiry_age() <= 0:
+#                 print(request.session.get_expiry_age())
+#                 logout_view(request)  # Log out the user if the session has expired
+#         response = self.get_response(request)
+#         return response

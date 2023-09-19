@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'managment',
+    'inlet'
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # user Added Middelware
     'main.middleware.AuthenticationMiddleware',  #Custom Auth
-    'main.middleware.SessionTimeoutMiddleware', #Session Expiray
+    # 'main.middleware.SessionTimeoutMiddleware', #Session Expiray
     
 ]
 
