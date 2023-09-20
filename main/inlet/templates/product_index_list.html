@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Product Index List</h1>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Product</th>
+            <th>Quantity Requested</th>
+            <th>Quantity Received</th>
+            <th>Received By</th>
+            <th>Arrival Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product_index in product_indexes %}
+        <tr>
+            <td>{{ product_index.id }}</td>
+            <td>{{ product_index.product.name }}</td>
+            <td>{{ product_index.quantity_requested }}</td>
+            <td>{{ product_index.quantity_received }}</td>
+            <td>{{ product_index.received_by }}</td>
+            <td>{{ product_index.arrive_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -25,7 +25,7 @@ def home(request):
         'sidebar': sidebar,
     }
 
-    return render(request, 'home.html', context)
+    return render(request, 'managment_home.html', context)
 
 
 @unauth_user  # IF User is Already Logged in no need to go for login page again
@@ -40,9 +40,9 @@ def login_view(request):
             if user.groups.exists():
                 group = user.groups.all()[0].name
             if group == 'admins' or group == 'managment_user':
-                return redirect('home')
+                return redirect('managment_home')
             elif group == 'inlet_user':
-                return redirect(reverse('inlet:home'))
+                return redirect(('inlet:inlet_home'))
             else:
                 return redirect('wating_feild')
         else:

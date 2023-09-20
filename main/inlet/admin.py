@@ -11,7 +11,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(ProductIndex)
 class ProductIndexAdmin(admin.ModelAdmin):
     list_display = ('product', 'quantity_requested',
-                    'quantity_received', 'arrive_date')
+                    'quantity_received', 'arrive_date','received_by')
     list_filter = ('arrive_date',)
     search_fields = ('product__name',)
 

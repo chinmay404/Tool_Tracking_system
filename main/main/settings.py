@@ -138,4 +138,4 @@ AUTH_USER_MODEL = 'managment.CustomUser'
 
 
 # Auto Logout (In SEC)
-SESSION_COOKIE_AGE = 30   # 30 minutes (30 * 60 seconds)
+# SESSION_COOKIE_AGE = 30   # 30 minutes (30 * 60 seconds)

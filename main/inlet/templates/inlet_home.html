@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<table>
+    <tr>
+        <th>Username</th>
+        <td>{{ username }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ email }}</td>
+    </tr>
+</table>
+<center>
+    <h1>INLET HOME</h1>
+</center>
+<a href="{% url 'logout' %}">Logout</a>
+<!-- Link to create a ProductIndex -->
+<a href="{% url 'inlet:create_product_index' %}">Create ProductIndex</a>
+
+<!-- Link to view a list of ProductIndex instances -->
+<a href="{% url 'inlet:list_product_index' %}">View ProductIndex List</a>
+
+<!-- Link to view a list of Master instances -->
+<a href="{% url 'inlet:list_masters' %}">View Master List</a>
+
+
+{% endblock %}
