@@ -5,16 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tool Tracking</title>
+
     <!-- Link to Bootstrap CSS for basic styling (optional) -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <!-- Custom CSS for sidebar and user info -->
     <style>
         body {
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
             margin: 0;
+            padding: 0;
         }
 
+        /* Sidebar Styles */
         .sidebar {
             height: 100%;
             width: 250px;
@@ -22,35 +26,60 @@
             top: 0;
             left: 0;
             background-color: #333;
-            padding-top: 20px;
             color: #fff;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
         }
 
         .sidebar a {
             padding: 15px;
-            text-align: center;
             text-decoration: none;
             font-size: 18px;
             color: #fff;
             display: block;
+            transition: background-color 0.3s;
         }
 
         .sidebar a:hover {
             background-color: #444;
         }
 
-        .user-info {
+        /* User Info Styles */
+        .user-info-box {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 250px;
             background-color: #333;
-            padding: 10px;
             color: #fff;
+            border-right: 1px solid #ccc;
+            padding: 15px;
         }
 
-        .user-info p {
-            margin: 5px 0;
+        .user-info {
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .main-content h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 0;
+        }
+
+        .main-content p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .main-content img {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
@@ -58,26 +87,32 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        {% for item in sidebar %}
-        <a href="{{ item.url }}">{{ item.text }}</a>
-        {% endfor %}
+        {% if user.groups.first.name == 'admins' or user.groups.first.name == 'inlet_user' %}
+        <a href="{% url 'inlet_home' %}">home</a>
+        <a href="{% url 'create_product_index' %}">create product index</a>
+        <a href="{% url 'list_product_index' %}">list product index</a>
+        <a href="{% url 'list_masters' %}">list masters</a>
+        {% endif %}
+        {% if user.groups.first.name == 'admins' or user.groups.first.name == 'managment_user' %}
+        <a href="{% url 'managment_home_black' %}">Home</a>
+        <a href="{% url 'inquiry' %}">inquiry</a>
+        {% endif %}
     </div>
 
     <!-- Main content container -->
-    <div style="margin-left: 250px; padding: 20px;">
+    <div class="main-content">
         {% block content %}{% endblock %}
     </div>
 
-    <!-- User info -->
-    <div class="user-info">
-        <p>Username: {{ user.username }}</p>
-        <p>Email: {{ user.email }}</p>
-        <p>Role: {{ user.groups.first.name }}</p>
-        <p><a href="{% url 'logout' %}">Logout</a></p>
+    <!-- User info box -->
+    <div class="user-info-box">
+        <div class="user-info">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Role:</strong> {{ user.groups.first.name }}</p>
+            <p><a href="{% url 'logout' %}" style="color: #fff;">Logout</a></p>
+        </div>
     </div>
 </body>
-<script>
-
-</script>
 
 </html>

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<center>
+    <h1>Products from Batch {{ batch_id_info }}</h1>
+</center>
+<div class="container">
+    <h1 class="heading-section">Product List</h1>
+    <div class="table-wrap">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Unique ID</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Batch ID</th>
+                    <th scope="col">Added Date</th>
+                    <th scope="col">Received By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for master in products %}
+                <tr>
+                    <td>{{ master.product }}</td>
+                    <td>{{ master.uuid }}</td>
+                    <td>{{ master.status }}</td>
+                    <td>{{ master.batch_id }}</td>
+                    <td>{{ master.added_date }}</td>
+                    <td>{{ master.received_by }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<center>
+    <div class="container">
+        <a href="{% url 'download_ids' batch_id_info %}" class="btn btn-primary">Download Unique IDs</a>
+    </div>
+</center>
+{% endblock %}

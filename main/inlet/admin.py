@@ -11,16 +11,16 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(ProductIndex)
 class ProductIndexAdmin(admin.ModelAdmin):
     list_display = ('product', 'quantity_requested',
-                    'quantity_received', 'arrive_date','received_by')
+                    'quantity_received', 'arrive_date','received_by','batch_id')
     list_filter = ('arrive_date',)
-    search_fields = ('product__name',)
+    search_fields = ('product__name','batch_id')
 
 
 @admin.register(Master)
 class MasterAdmin(admin.ModelAdmin):
-    list_display = ('product', 'uuid', 'added_date', 'status')
-    list_filter = ('status',)
-    search_fields = ('product__name', 'uuid')
+    list_display = ('product', 'uuid', 'added_date','received_by', 'status','batch_id')
+    list_filter = ('status','added_date')
+    search_fields = ('product__name', 'uuid','batch_id')
 
 
 # Register your models with the admin site

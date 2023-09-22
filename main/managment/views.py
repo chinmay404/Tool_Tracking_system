@@ -1,12 +1,11 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse ,get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm, CustomUserAuthenticationForm
 from .decorators import unauth_user, allowed_users
-from django.urls import reverse
 from django.contrib.auth.models import Group
+from inlet.models import Master,ProductIndex
 
 
 @login_required(login_url='managment/login/')
@@ -15,8 +14,8 @@ def home(request):
     username = request.user.username
     email = request.user.email
     sidebar = [
-        {'text': 'Dashboard_managment', 'url': '/dashboard/'},
-        {'text': 'Profile_managmnet', 'url': '/profile/'},
+        # {'url': 'home', 'text': 'home'},
+        {'url': 'inquiry', 'text': 'inquiry'},
     ]
 
     context = {
@@ -39,10 +38,10 @@ def login_view(request):
             # REDIRECTING USERS ACCORDING TO THEIR GROUPS
             if user.groups.exists():
                 group = user.groups.all()[0].name
-            if group == 'admins' or group == 'managment_user':
+            if group == 'admins' or group == 'managment_user' or user.username =='admin':
                 return redirect('managment_home')
             elif group == 'inlet_user':
-                return redirect(('inlet:inlet_home'))
+                return redirect(('inlet_home'))
             else:
                 return redirect('wating_feild')
         else:
@@ -63,12 +62,10 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-
-            # Replace with your group name
-            group = Group.objects.get(name='pending_user')
+            group = Group.objects.get(name='wait_list')
             user.groups.add(group)
             login(request, user)
-            return redirect('user_check')
+            return redirect('wating_feild')
     else:
         form = CustomUserCreationForm()
 
@@ -95,3 +92,27 @@ def admin_only(request):
 @login_required(login_url='managment/login/')
 def wating_feild(request):
     return render(request,'wating_feild.html')
+
+
+@login_required(login_url='managment/login/')
+@allowed_users(allowed_roles=['admins','managment_user'])
+def inquiry(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        if Master.objects.filter(uuid=id).exists():
+            item = get_object_or_404(Master, uuid=id)
+        else:
+            item = None
+        
+        if ProductIndex.objects.filter(batch_id=id).exists():
+            batch_id = id
+            master_in_batch = Master.objects.filter(batch_id=batch_id)
+        else:
+            batch = None
+        return render(request, 'inquiry.html', {'item': item , 'master_in_batch' : master_in_batch})
+    else:
+        return render(request, 'inquiry.html')
+    
+
+
+

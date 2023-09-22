@@ -1,27 +1,115 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<table>
-    <tr>
-        <th>Username</th>
-        <td>{{ username }}</td>
-    </tr>
-    <tr>
-        <th>Email</th>
-        <td>{{ email }}</td>
-    </tr>
-</table>
 <center>
     <h1>INLET HOME</h1>
 </center>
-<a href="{% url 'logout' %}">Logout</a>
-<!-- Link to create a ProductIndex -->
-<a href="{% url 'inlet:create_product_index' %}">Create ProductIndex</a>
+<div class="container">
+    <h1 class="heading-section">Product Index List</h1>
 
-<!-- Link to view a list of ProductIndex instances -->
-<a href="{% url 'inlet:list_product_index' %}">View ProductIndex List</a>
+    <!-- Add the search bar -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search...">
+    </div>
+    <div class="sorting-dropdown">
+        <label for="sort-select">Sort by:</label>
+        <select id="sort-select">
+            <option value="id">ID</option>
+            <option value="product">Product</option>
+            <option value="quantity_requested">Quantity Requested</option>
+            <option value="quantity_received">Quantity Received</option>
+            <option value="batch_id">Batch ID</option>
+            <option value="status">Status</option>
+            <option value="received_by">Received By</option>
+            <option value="arrive_date">Arrival Date</option>
+        </select>
+    </div>
 
-<!-- Link to view a list of Master instances -->
-<a href="{% url 'inlet:list_masters' %}">View Master List</a>
+    <div class="table-wrap">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th data-sort="id">ID</th>
+                    <th data-sort="product">Product</th>
+                    <th data-sort="quantity_requested">Quantity Requested</th>
+                    <th data-sort="quantity_received">Quantity Received</th>
+                    <th data-sort="batch_id">Batch ID</th>
+                    <th data-sort="status">Status</th>
+                    <th data-sort="received_by">Received By</th>
+                    <th data-sort="arrive_date">Arrival Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product_index in product_indexes %}
+                <tr>
+                    <td>{{ product_index.id }}</td>
+                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a>
+                    </td>
+                    <td>{{ product_index.quantity_requested }}</td>
+                    <td>{{ product_index.quantity_received }}</td>
+                    <td>{{ product_index.batch_id }}</td>
+                    <td>{{ product_index.status }}</td>
+                    <td>{{ product_index.received_by }}</td>
+                    <td>{{ product_index.arrive_date }}</td>
 
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const table = document.querySelector('.table');
+        const tbody = table.querySelector('tbody');
+        const headers = table.querySelectorAll('th[data-sort]');
+        const sortSelect = document.getElementById('sort-select');
+        let currentSortColumn = null;
+        let isAscending = true;
+
+        // Function to sort the table by the specified column
+        function sortTable(column) {
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((rowA, rowB) => {
+                const valueA = rowA.querySelector(`td:nth-child(${Array.from(headers).indexOf(column) + 1})`).textContent;
+                const valueB = rowB.querySelector(`td:nth-child(${Array.from(headers).indexOf(column) + 1})`).textContent;
+
+                if (isAscending) {
+                    return valueA.localeCompare(valueB);
+                } else {
+                    return valueB.localeCompare(valueA);
+                }
+            });
+
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            });
+        }
+
+        // Add click event listeners to table headers for sorting
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const column = header.getAttribute('data-sort');
+                if (column === currentSortColumn) {
+                    isAscending = !isAscending;
+                } else {
+                    isAscending = true;
+                    currentSortColumn = column;
+                }
+                sortTable(column);
+            });
+        });
+
+        // Add change event listener to the sorting dropdown
+        sortSelect.addEventListener('change', () => {
+            const selectedOption = sortSelect.value;
+            currentSortColumn = selectedOption;
+            sortTable(selectedOption);
+        });
+    });
+</script>
 
 {% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Inquiry</h1>
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        <div class="form-row align-items-center">
+            <div class="col-auto">
+                <label for="id" class="sr-only">Enter ID:</label>
+                <input type="text" name="id" id="id" class="form-control" placeholder="Master ID">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <div id="inquiry-results">
+        {% if item %}
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Information</h2>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>ID:</strong> {{ item.uuid }}</li>
+                    <li class="list-group-item"><strong>Batch ID:</strong> {{ item.batch_id }}</li>
+                    <li class="list-group-item"><strong>Product Name:</strong> {{ item.product }}</li>
+                    <li class="list-group-item"><strong>Status:</strong> {{ item.status }}</li>
+                    <li class="list-group-item"><strong>Added Date:</strong> {{ item.added_date }}</li>
+                    <li class="list-group-item"><strong>Received By:</strong> {{ item.received_by }}</li>
+                    <li class="list-group-item"><strong>Data JSON:</strong> {{ item.data_json }}</li>
+                </ul>
+            </div>
+        </div>
+        {% else %}
+        {% if master_in_batch %}
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Information</h2>
+                {% for master in master_in_batch %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>ID:</strong> {{ master.uuid }}</li>
+                    <li class="list-group-item"><strong>Batch ID:</strong> {{ master.batch_id }}</li>
+                    <li class="list-group-item"><strong>Product Name:</strong> {{ master.product }}</li>
+                    <li class="list-group-item"><strong>Status:</strong> {{ master.status }}</li>
+                    <li class="list-group-item"><strong>Added Date:</strong> {{ master.added_date }}</li>
+                    <li class="list-group-item"><strong>Received By:</strong> {{ master.received_by }}</li>
+                    <li class="list-group-item"><strong>Data JSON:</strong> {{ master.data_json }}</li>
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <center><p>No matching item found.</p></center>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

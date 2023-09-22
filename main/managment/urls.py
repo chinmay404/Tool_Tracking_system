@@ -14,5 +14,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('admin_only/', views.admin_only, name='admin_only'),
     path('wating_feild/', views.wating_feild, name='wating_feild'),
+    path('inquiry/', views.inquiry, name='inquiry'),
     
 ]

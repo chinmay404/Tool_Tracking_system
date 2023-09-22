@@ -6,7 +6,7 @@ from managment import views as managment_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('logout/', managment_views.logout_view, name='logout'),
-    path('managment', include('managment.urls')),
-    path('inlet', include('inlet.urls')),
+    path('managment/', include('managment.urls')),
+    path('inlet/', include('inlet.urls')),
     path('', RedirectView.as_view(pattern_name='managment_home', permanent=False)),  
 ]

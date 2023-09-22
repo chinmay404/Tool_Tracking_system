@@ -1,30 +1,66 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Master List</h1>
-<table border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Product</th>
-            <th>UUID</th>
-            <th>Status</th>
-            <th>Added Date</th>
-            <th>Received By</th>
-            <th>Data JSON</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for master in masters %}
-        <tr>
-            <td>{{ master.id }}</td>
-            <td>{{ master.product.name }}</td>
-            <td>{{ master.uuid }}</td>
-            <td>{{ master.status }}</td>
-            <td>{{ master.added_date }}</td>
-            <td>{{ master.received_by }}</td>
-            <td>{{ master.data_json }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<title>Master List</title>
+
+<!-- CSS framework -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KG4B3v2qCa26UQ0nMj9nlAR5rdnkAL1eQGokQfAWyTzd34rOe" crossorigin="anonymous">
+
+<!-- Custom CSS -->
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    th {
+        background-color: #ccc;
+    }
+
+    td {
+        background-color: #fff;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f5f5f5;
+    }
+</style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Master List</h1>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Unique ID</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Batch ID</th>
+                    <th scope="col">Added Date</th>
+                    <th scope="col">Received By</th
+                </tr>
+            </thead>
+            <tbody>
+                {% for master in masters %}
+                <tr>
+                    <td>{{ master.product.name }}</td>
+                    <td>{{ master.uuid }}</td>
+                    <td>{{ master.status }}</td>
+                    <td>{{ master.batch_id }}</td>
+                    <td>{{ master.added_date }}</td>
+                    <td>{{ master.received_by }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
 {% endblock %}
