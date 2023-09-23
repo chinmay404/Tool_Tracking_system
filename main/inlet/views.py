@@ -130,4 +130,5 @@ def download_ids(request, batch_id):
 @login_required(login_url='managment/login/')
 @allowed_users(['admins', 'inlet_user'])
 def activation(request):
+    
     pass

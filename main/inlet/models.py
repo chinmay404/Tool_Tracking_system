@@ -58,7 +58,7 @@ class Master(models.Model):
     batch_id=models.CharField(max_length=255,editable=False)  # Add this field
 
     status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, default='deactive')
+        max_length=20, choices=STATUS_CHOICES, default='in_progress')
     added_date = models.DateTimeField(default=timezone.now)
     received_by = models.ForeignKey(
         CustomUser, on_delete=models.SET_NULL, null=True, editable=False)

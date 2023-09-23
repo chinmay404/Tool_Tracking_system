@@ -1,19 +1,140 @@
-
 {% extends 'base.html' %}
-{% block content %}
-<table>
-    <tr>
-        <th>Username</th>
-        <td>{{ username }}</td>
-    </tr>
-    <tr>
-        <th>Email</th>
-        <td>{{ email }}</td>
-    </tr>
-    <a href="{% url 'logout' %}">Logout</a>
-    <a href="{% url 'admin_only' %}">ADMIN ONLY</a>
-</table>
-<center><h1>MANAGMENT HOME</h1></center>
-<a href="{% url 'inquiry' %}">Inquiry</a>
 
+{% block content %}
+<style>
+
+    .container {
+        max-width: 90%;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    .actions {
+        text-align: right;
+        margin-bottom: 20px;
+    }
+
+    .action-link {
+        margin-left: 10px;
+        text-decoration: none;
+        color: #007BFF;
+    }
+
+    .product-list {
+        margin-top: 20px;
+    }
+
+    .product-list h2 {
+        color: #333;
+    }
+
+    .product-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .product-table th,
+    .product-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .product-table th {
+        background-color: #141414;
+        color: #fff;
+    }
+
+    .product-table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .product-table a {
+        text-decoration: none;
+        color: #007BFF;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <h1>MANAGEMENT HOME</h1>
+    <div class="actions">
+        <a href="{% url 'inquiry' %}" class="action-link">Inquiry</a>
+        <a href="{% url 'logout' %}" class="action-link">Logout</a>
+        <a href="{% url 'admin_only' %}" class="action-link">ADMIN ONLY</a>
+    </div>
+
+    <div class="product-list">
+        <h2>ACTIVE BATCH</h2>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Requested Quantity</th>
+                    <th>Received Quantity</th>
+                    <th>Batch ID</th>
+                    <th>Status</th>
+                    <th>Received By</th>
+                    <th>Arrival Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product_index in activated_product_index %}
+                <tr>
+                    <td>{{ product_index.id }}</td>
+                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a></td>
+                    <td>{{ product_index.quantity_requested }}</td>
+                    <td>{{ product_index.quantity_received }}</td>
+                    <td>{{ product_index.batch_id }}</td>
+                    <td>{{ product_index.status }}</td>
+                    <td>{{ product_index.received_by }}</td>
+                    <td>{{ product_index.arrive_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="product-list">
+        <h2>DEACTIVE BATCH</h2>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Requested Quantity</th>
+                    <th>Received Quantity</th>
+                    <th>Batch ID</th>
+                    <th>Status</th>
+                    <th>Received By</th>
+                    <th>Arrival Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product_index in deactive_product_index %}
+                <tr>
+                    <td>{{ product_index.id }}</td>
+                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a></td>
+                    <td>{{ product_index.quantity_requested }}</td>
+                    <td>{{ product_index.quantity_received }}</td>
+                    <td>{{ product_index.batch_id }}</td>
+                    <td>{{ product_index.status }}</td>
+                    <td>{{ product_index.received_by }}</td>
+                    <td>{{ product_index.arrive_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

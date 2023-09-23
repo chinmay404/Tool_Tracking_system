@@ -13,7 +13,7 @@
                     <th scope="col">Product</th>
                     <th scope="col">Unique ID</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Batch ID</th>
+                    <!-- <th scope="col">Batch ID</th> -->
                     <th scope="col">Added Date</th>
                     <th scope="col">Received By</th>
                 </tr>
@@ -24,7 +24,7 @@
                     <td>{{ master.product }}</td>
                     <td>{{ master.uuid }}</td>
                     <td>{{ master.status }}</td>
-                    <td>{{ master.batch_id }}</td>
+                    <!-- <td>{{ master.batch_id }}</td> -->
                     <td>{{ master.added_date }}</td>
                     <td>{{ master.received_by }}</td>
                 </tr>
@@ -33,9 +33,11 @@
         </table>
     </div>
 </div>
+{% if user.groups.first.name == 'admins' or user.groups.first.name == 'inlet_user' %}
 <center>
     <div class="container">
         <a href="{% url 'download_ids' batch_id_info %}" class="btn btn-primary">Download Unique IDs</a>
     </div>
 </center>
+{% endif %}
 {% endblock %}

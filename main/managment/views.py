@@ -11,17 +11,11 @@ from inlet.models import Master,ProductIndex
 @login_required(login_url='managment/login/')
 @allowed_users(allowed_roles=['admins', 'managment_user',])
 def home(request):
-    username = request.user.username
-    email = request.user.email
-    sidebar = [
-        # {'url': 'home', 'text': 'home'},
-        {'url': 'inquiry', 'text': 'inquiry'},
-    ]
-
+    activated_product_index = ProductIndex.objects.filter(status='active')
+    deactive_product_index = ProductIndex.objects.filter(status='deactive')
     context = {
-        'username': username,
-        'email': email,
-        'sidebar': sidebar,
+        'activated_product_index':activated_product_index,
+        'deactive_product_index' : deactive_product_index
     }
 
     return render(request, 'managment_home.html', context)
@@ -97,6 +91,8 @@ def wating_feild(request):
 @login_required(login_url='managment/login/')
 @allowed_users(allowed_roles=['admins','managment_user'])
 def inquiry(request):
+    master_in_batch = None
+    item = None
     if request.method == 'POST':
         id = request.POST.get('id')
         if Master.objects.filter(uuid=id).exists():
