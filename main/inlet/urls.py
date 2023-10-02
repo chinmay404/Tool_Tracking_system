@@ -13,4 +13,7 @@ urlpatterns = [
     path('product_batch/<uuid:batch_id>/', views.product_batch, name='product_batch'),
     path('product_quantity/<int:product_id>/', views.product_quantity, name='product_quantity'),
     path('download_ids/<uuid:batch_id>/', views.download_ids, name='download_ids'),
+    path('activation/', views.activation, name='activation'),
+    path('view_product/<str:product_id>/', views.view_master, name='view_product'),
+
 ]

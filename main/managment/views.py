@@ -6,6 +6,7 @@ from .forms import CustomUserCreationForm, CustomUserAuthenticationForm
 from .decorators import unauth_user, allowed_users
 from django.contrib.auth.models import Group
 from inlet.models import Master,ProductIndex
+from django.db.models import Q
 
 
 @login_required(login_url='managment/login/')
@@ -89,26 +90,33 @@ def wating_feild(request):
 
 
 @login_required(login_url='managment/login/')
-@allowed_users(allowed_roles=['admins','managment_user'])
+@allowed_users(allowed_roles=['admins', 'managment_user'])
 def inquiry(request):
-    master_in_batch = None
-    item = None
+    search_results = None
+
     if request.method == 'POST':
-        id = request.POST.get('id')
-        if Master.objects.filter(uuid=id).exists():
-            item = get_object_or_404(Master, uuid=id)
-        else:
-            item = None
-        
-        if ProductIndex.objects.filter(batch_id=id).exists():
-            batch_id = id
-            master_in_batch = Master.objects.filter(batch_id=batch_id)
-        else:
-            batch = None
-        return render(request, 'inquiry.html', {'item': item , 'master_in_batch' : master_in_batch})
-    else:
-        return render(request, 'inquiry.html')
-    
+        query = request.POST.get('query')
+        if query:
+            fields_to_search = ['uuid', 'batch_id', 'product__name', 'status', 'added_date', 'received_by__username','status']
+            queries = [Q(**{f'{field}__icontains': query}) for field in fields_to_search]
+            search_query = Q()
+            for query in queries:
+                search_query |= query
+
+            search_results = Master.objects.filter(search_query)
+
+    return render(request, 'inquiry.html', {'search_results': search_results})
 
 
 
+
+@login_required(login_url='managment/login/')
+@allowed_users(allowed_roles=['admins', 'managment_user'])
+def list_batch(request):
+    product_indexes = ProductIndex.objects.all().order_by('-arrive_date')
+
+    context = {
+        'product_indexes': product_indexes
+    }
+
+    return render(request, 'list_batch.html', context)

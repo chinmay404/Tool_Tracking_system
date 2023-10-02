@@ -22,7 +22,7 @@
                 {% for master in products %}
                 <tr>
                     <td>{{ master.product }}</td>
-                    <td>{{ master.uuid }}</td>
+                    <td><a href="{% url 'view_product' master.uuid %}">{{ master.uuid }}</a></td>
                     <td>{{ master.status }}</td>
                     <!-- <td>{{ master.batch_id }}</td> -->
                     <td>{{ master.added_date }}</td>

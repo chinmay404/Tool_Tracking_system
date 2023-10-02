@@ -4,4 +4,4 @@ from .models import ProductIndex
 class ProductIndexForm(forms.ModelForm):
     class Meta:
         model = ProductIndex
-        fields = '__all__'  # Includ
+        fields = '__all__'  

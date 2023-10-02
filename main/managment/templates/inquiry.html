@@ -6,52 +6,54 @@
         {% csrf_token %}
         <div class="form-row align-items-center">
             <div class="col-auto">
-                <label for="id" class="sr-only">Enter ID:</label>
-                <input type="text" name="id" id="id" class="form-control" placeholder="Master ID">
+                <label for="query" class="sr-only">Search:</label>
+                <input type="text" name="query" id="query" class="form-control" placeholder="Search by ID, Batch ID, Product Name, Status, etc.">
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Search</button>
             </div>
         </div>
     </form>
 
     <div id="inquiry-results">
-        {% if item %}
+        {% if search_results %}
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title">Information</h2>
+                <h2 class="card-title">Search Results</h2>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><strong>ID:</strong> {{ item.uuid }}</li>
-                    <li class="list-group-item"><strong>Batch ID:</strong> {{ item.batch_id }}</li>
-                    <li class="list-group-item"><strong>Product Name:</strong> {{ item.product }}</li>
-                    <li class="list-group-item"><strong>Status:</strong> {{ item.status }}</li>
-                    <li class="list-group-item"><strong>Added Date:</strong> {{ item.added_date }}</li>
-                    <li class="list-group-item"><strong>Received By:</strong> {{ item.received_by }}</li>
-                    <li class="list-group-item"><strong>Data JSON:</strong> {{ item.data_json }}</li>
+                    {% for item in search_results %}
+                    <li class="list-group-item">
+                        <strong>ID:</strong> {{ item.uuid }}<br>
+                        <strong>Batch ID:</strong> {{ item.batch_id }}<br>
+                        <strong>Product Name:</strong> {{ item.product.name }}<br>
+                        <strong>Status:</strong> {{ item.status }}<br>
+                        <strong>Added Date:</strong> {{ item.added_date }}<br>
+                        <strong>Received By:</strong> {{ item.received_by.username }}<br>
+                        <strong>Data JSON:</strong> {{ item.data_json }}<br>
+                    </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
-        {% else %}
-        {% if master_in_batch %}
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title">Information</h2>
-                {% for master in master_in_batch %}
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><strong>ID:</strong> {{ master.uuid }}</li>
-                    <li class="list-group-item"><strong>Batch ID:</strong> {{ master.batch_id }}</li>
-                    <li class="list-group-item"><strong>Product Name:</strong> {{ master.product }}</li>
-                    <li class="list-group-item"><strong>Status:</strong> {{ master.status }}</li>
-                    <li class="list-group-item"><strong>Added Date:</strong> {{ master.added_date }}</li>
-                    <li class="list-group-item"><strong>Received By:</strong> {{ master.received_by }}</li>
-                    <li class="list-group-item"><strong>Data JSON:</strong> {{ master.data_json }}</li>
-                </ul>
-                {% endfor %}
-            </div>
+        
+        <div class="pagination">
+            <span class="step-links">
+                {% if search_results.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ search_results.previous_page_number }}">previous</a>
+                {% endif %}
+                
+                <span class="current-page">Page {{ search_results.number }} of {{ search_results.paginator.num_pages }}.</span>
+                
+                {% if search_results.has_next %}
+                    <a href="?page={{ search_results.next_page_number }}">next</a>
+                    <a href="?page={{ search_results.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
         </div>
+        
         {% else %}
-        <center><p>No matching item found.</p></center>
-        {% endif %}
+        <center><p>No matching items found.</p></center>
         {% endif %}
     </div>
 </div>

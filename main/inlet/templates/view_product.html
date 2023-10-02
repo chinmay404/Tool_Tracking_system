@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h3 class="mb-4">Product Details</h3>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">ID: {{ product.uuid }}</h4>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Batch ID:</strong> {{ product.batch_id }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Product Name:</strong> {{ product.product.name }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Status:</strong> {{ product.status }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Added Date:</strong> {{ product.added_date }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Received By:</strong> {{ product.received_by }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Data JSON:</strong> {{ product.data_json }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -6,6 +6,9 @@ from .forms import ProductIndexForm
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 import csv
+from django.utils import timezone
+from django.contrib import messages
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -19,7 +22,7 @@ def home(request):
         {'url': 'create_product_index', 'text': 'Index New Product'},
         {'url': 'list_masters', 'text': 'List Master'},
     ]
-    product_indexes = ProductIndex.objects.all()
+    product_indexes = ProductIndex.objects.all().order_by('-arrive_date')
 
     context = {
         'username': username,
@@ -30,12 +33,6 @@ def home(request):
     }
 
     return render(request, 'inlet_home.html', context)
-
-# Product Related
-# @login_required(login_url='managment/login/')
-# @allowed_users(['admins','inlet_user'])
-# def product_list(requet):
-#     return render
 
 
 @login_required(login_url='managment/login/')
@@ -64,7 +61,7 @@ def list_product_index(request):
 @login_required(login_url='managment/login/')
 @allowed_users(['admins', 'inlet_user', 'managment_user'])
 def list_masters(request):
-    masters = Master.objects.all()
+    masters = Master.objects.all().order_by('-added_date') 
     return render(request, 'master_list.html', {'masters': masters})
 
 
@@ -130,5 +127,37 @@ def download_ids(request, batch_id):
 @login_required(login_url='managment/login/')
 @allowed_users(['admins', 'inlet_user'])
 def activation(request):
-    
-    pass
+    if request.method == 'POST':
+        uuid_to_activate = request.POST.get('uuid_to_activate').replace(" ", "")
+        try:
+            master_product = Master.objects.get(uuid=uuid_to_activate)
+            if request.user.has_perm('inlet.change_master'):
+                try:
+                    master_product.status = 'active'
+                    activator_name = request.user.username  # Get activator name
+                    activation_date = timezone.now()  # Get activation date
+                    master_product.data_json = {
+                        'activator_name': activator_name,
+                        'activation_date': activation_date.strftime('%Y-%m-%d %H:%M:%S'),
+                    }
+                    master_product.save()
+                    messages.success(request, 'Product activated successfully.')
+                except Exception as e:
+                    pass
+            else:
+                messages.error(request, 'You are not authorized to activate this product.')
+        except Master.DoesNotExist:
+            messages.error(request, 'Invalid UUID. Product not found.')
+
+    return render(request, 'activation.html')
+
+
+
+@login_required(login_url='managment/login/')
+@allowed_users(['admins', 'inlet_user', 'managment_user'])
+def view_master(request, product_id):
+    product = get_object_or_404(Master, uuid=product_id)
+    context = {
+        'product': product,
+    }
+    return render(request, 'view_product.html', context)

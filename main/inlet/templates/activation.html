@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h3 class="mb-4">Activate Product</h3>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="uuid_to_activate">Enter UUID to Activate:</label>
+            <input type="text" id="uuid_to_activate" name="uuid_to_activate" class="form-control" required>
+            <div class="invalid-feedback">
+                Please enter a valid UUID.
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Activate</button>
+    </form>
+</div>
+
+<script>
+    // Add client-side validation for UUID input
+    document.querySelector("#uuid_to_activate").addEventListener("input", function() {
+        const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+        const input = this;
+        if (uuidRegex.test(input.value)) {
+            input.setCustomValidity('');
+        } else {
+            input.setCustomValidity('Please enter a valid UUID in the format: 8-4-4-12');
+        }
+    });
+</script>
+
+{% endblock %}

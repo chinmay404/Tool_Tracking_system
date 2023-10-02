@@ -30,13 +30,83 @@
     tr:nth-child(even) {
         background-color: #f5f5f5;
     }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination a {
+        text-decoration: none;
+        background-color: #007BFF;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .pagination a:hover {
+        background-color: #0056b3;
+    }
+
+    /* Main content */
+    .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 10px 20px;
+    }
+
+    /* Table header */
+    .table-striped th {
+        background-color: #ccc;
+        color: #333;
+    }
+
+    /* Table body */
+    .table-striped tbody tr:nth-child(even) {
+        background-color: #f5f5f5;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        margin-top: 20px;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination a {
+        text-decoration: none;
+        background-color: #007BFF;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .pagination a:hover {
+        background-color: #0056b3;
+    }
+
+    .pagination .active a {
+        background-color: #ccc;
+    }
 </style>
 </head>
 
 <body>
     <div class="container">
         <h1>Master List</h1>
-
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search...">
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -45,14 +115,14 @@
                     <th scope="col">Status</th>
                     <th scope="col">Batch ID</th>
                     <th scope="col">Added Date</th>
-                    <th scope="col">Received By</th
+                    <th scope="col">Received By</th>
                 </tr>
             </thead>
             <tbody>
                 {% for master in masters %}
                 <tr>
                     <td>{{ master.product.name }}</td>
-                    <td>{{ master.uuid }}</td>
+                    <td><a href="{% url 'view_product' master.uuid %}">{{ master.uuid }}</a></td>
                     <td>{{ master.status }}</td>
                     <td>{{ master.batch_id }}</td>
                     <td>{{ master.added_date }}</td>
@@ -61,6 +131,58 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        <ul class="pagination">
+            {% if masters.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            <li class="page-item"><a class="page-link" href="?page={{ masters.previous_page_number }}">{{
+                    masters.previous_page_number }}</a></li>
+            {% endif %}
+
+            <li class="page-item active"><span class="page-link">{{ masters.number }}</span></li>
+
+            {% if masters.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ masters.next_page_number }}">{{
+                    masters.next_page_number }}</a></li>
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            <li class="page-item"><a class="page-link" href="?page={{ masters.paginator.num_pages }}">{{
+                    masters.paginator.num_pages }}</a></li>
+            {% endif %}
+        </ul>
     </div>
 </body>
+
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const table = document.querySelector('.table');
+        const tbody = table.querySelector('tbody');
+
+        // Function to filter the table rows based on search input
+        function filterTable(searchValue) {
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.forEach(row => {
+                const rowData = Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.toLowerCase());
+                if (rowData.some(data => data.includes(searchValue.toLowerCase()))) {
+            row.style.display = '';
+                } else {
+            row.style.display = 'none';
+                }
+            });
+        }
+
+        // Event listener to trigger filtering when the user types in the search input
+        searchInput.addEventListener('input', function () {
+            filterTable(this.value);
+        });
+    });
+</script>
+
+
+</script>
+
 {% endblock %}

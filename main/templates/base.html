@@ -7,12 +7,12 @@
     <title>Tool Tracking</title>
 
     <!-- Link to Bootstrap CSS for basic styling (optional) -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <!-- Custom CSS for sidebar and user info -->
+    <!-- Custom CSS for styling -->
     <style>
         body {
-            background-color: #f0f0f0;
+            background-color: #f8f8f8;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -27,12 +27,12 @@
             left: 0;
             background-color: #333;
             color: #fff;
-            border-right: 1px solid #ccc;
+            border-right: 1px solid #222;
             overflow-y: auto;
         }
 
         .sidebar a {
-            padding: 15px;
+            padding: 15px 20px;
             text-decoration: none;
             font-size: 18px;
             color: #fff;
@@ -52,8 +52,8 @@
             width: 250px;
             background-color: #333;
             color: #fff;
-            border-right: 1px solid #ccc;
-            padding: 15px;
+            border-right: 1px solid #222;
+            padding: 15px 20px;
         }
 
         .user-info {
@@ -70,36 +70,70 @@
             font-size: 24px;
             font-weight: bold;
             margin-top: 0;
+            color: #333;
         }
 
         .main-content p {
             font-size: 16px;
-            line-height: 1.5;
+            line-height: 1.6;
+            color: #555;
         }
 
         .main-content img {
             max-width: 100%;
             height: auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom style for messages */
+        .alert-message {
+            font-size: 14px;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* Animation for fading in */
+        .fade-in {
+            opacity: 1;
         }
     </style>
 </head>
 
 <body>
+
     <!-- Sidebar -->
     <div class="sidebar">
         {% if user.groups.first.name == 'admins' or user.groups.first.name == 'inlet_user' %}
-        <a href="{% url 'inlet_home' %}">home</a>
-        <a href="{% url 'create_product_index' %}">create product index</a>
-        <a href="{% url 'list_product_index' %}">list product index</a>
-        <a href="{% url 'list_masters' %}">list masters</a>
+        <a href="{% url 'inlet_home' %}">Inlet Home</a>
+        <a href="{% url 'create_product_index' %}">Create Batch</a>
+        <a href="{% url 'list_product_index' %}">List Products</a>
+        <a href="{% url 'list_masters' %}">List Master  </a>
+        <a href="{% url 'activation' %}">Product Activation</a>
         {% endif %}
         {% if user.groups.first.name == 'admins' or user.groups.first.name == 'managment_user' %}
-        <a href="{% url 'managment_home_black' %}">Home</a>
-        <a href="{% url 'inquiry' %}">inquiry</a>
+        <a href="{% url 'managment_home_black' %}">Managment Home</a>
+        <a href="{% url 'inquiry' %}">Inquiry</a>
+        <a href="{% url 'list_batch' %}">List Batches</a>
         {% endif %}
     </div>
 
     <!-- Main content container -->
+    {% for message in messages %}
+    <div class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ message }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+    {% endfor %}
+
     <div class="main-content">
         {% block content %}{% endblock %}
     </div>
@@ -107,6 +141,7 @@
     <!-- User info box -->
     <div class="user-info-box">
         <div class="user-info">
+            <h3>User Info</h3>
             <p><strong>Username:</strong> {{ user.username }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>Role:</strong> {{ user.groups.first.name }}</p>
@@ -114,5 +149,5 @@
         </div>
     </div>
 </body>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </html>
