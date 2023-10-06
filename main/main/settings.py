@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import  os
 from django.contrib.messages import constants as messages
+import socket
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,8 +38,10 @@ SECRET_KEY = 'django-insecure-#$xm@-#_a^te52k33y&no4fh5&qezyj#fey&pml@5czvb10gnk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+local_ip = socket.gethostbyname(socket.gethostname())
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', local_ip,'192.168.1.4','192.168.60.63']
+print(f'Allowed Hosts : {ALLOWED_HOSTS}')
 
 # Application definition
 
@@ -49,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework','api',
     'managment',
     'inlet'
 ]
@@ -150,4 +154,4 @@ AUTH_USER_MODEL = 'managment.CustomUser'
 
 
 # Auto Logout (In SEC)
-SESSION_COOKIE_AGE = 1800   # 30 minutes (30 * 60 seconds)
+SESSION_COOKIE_AGE = 180000   # 30 minutes (30 * 60 seconds)

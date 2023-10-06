@@ -97,7 +97,7 @@ def product_quantity(request, product_id):
 
 
 @login_required(login_url='managment/login/')
-@allowed_users(['admins', 'inlet_user', 'managment_user'])
+@allowed_users(['admins', 'inlet_user', 'managment_user','activators'])
 def product_batch(request, batch_id):
     products = Master.objects.filter(batch_id=batch_id)
     context = {
@@ -109,7 +109,7 @@ def product_batch(request, batch_id):
 
 
 @login_required(login_url='managment/login/')
-@allowed_users(['admins', 'inlet_user', 'managment_user'])
+@allowed_users(['admins', 'inlet_user', 'managment_user','activators'])
 def download_ids(request, batch_id):
 
     products = Master.objects.filter(batch_id=batch_id)
@@ -121,11 +121,27 @@ def download_ids(request, batch_id):
         writer.writerow([product.uuid])
     return response
 
+@login_required(login_url='managment/login/')
+@allowed_users(['admins', 'inlet_user', 'managment_user','activators'])
+def download_id(request, master_id):
+
+    try:
+        product = Master.objects.get(uuid=id)
+        products = [product]
+        response['Content-Disposition'] = f'attachment; filename="unique_id_{id}.csv"'
+    except Master.DoesNotExist:
+            messages.error(request, 'Invalid ID. Product not found.')
+    writer = csv.writer(response)
+    writer.writerow(['Unique ID'])
+    for product in products:
+        writer.writerow([product.uuid])
+    return response
+
 
 
 
 @login_required(login_url='managment/login/')
-@allowed_users(['admins', 'inlet_user'])
+@allowed_users(['admins', 'inlet_user' ,'activators'])
 def activation(request):
     if request.method == 'POST':
         uuid_to_activate = request.POST.get('uuid_to_activate').replace(" ", "")
@@ -134,12 +150,15 @@ def activation(request):
             if request.user.has_perm('inlet.change_master'):
                 try:
                     master_product.status = 'active'
-                    activator_name = request.user.username  # Get activator name
-                    activation_date = timezone.now()  # Get activation date
-                    master_product.data_json = {
+                    activator_name = request.user.username 
+                    activation_date = timezone.now()  
+                    current_data = master_product.data_json or {}
+                    current_data['status'] = {
                         'activator_name': activator_name,
                         'activation_date': activation_date.strftime('%Y-%m-%d %H:%M:%S'),
+                        'status_changed_to': 'active',
                     }
+                    master_product.data_json = current_data
                     master_product.save()
                     messages.success(request, 'Product activated successfully.')
                 except Exception as e:
@@ -153,8 +172,9 @@ def activation(request):
 
 
 
+
 @login_required(login_url='managment/login/')
-@allowed_users(['admins', 'inlet_user', 'managment_user'])
+@allowed_users(['admins', 'inlet_user', 'managment_user','activators'])
 def view_master(request, product_id):
     product = get_object_or_404(Master, uuid=product_id)
     context = {

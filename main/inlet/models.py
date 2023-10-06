@@ -34,6 +34,8 @@ class ProductIndex(models.Model):
     received_by = models.ForeignKey(
         CustomUser, on_delete=models.SET_NULL, null=True, editable=False)
     arrive_date = models.DateTimeField(default=timezone.now)
+    # GRN_NO = models.CharField(max_length=255 , null=True)
+    # GRN_NO = models.CharField(max_length=20)
 
     def __str__(self):
         return f"{self.product.name} Index"
@@ -51,7 +53,7 @@ class Master(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True ,primary_key=True)
-    batch_id=models.CharField(max_length=255,editable=False)  # Add this field
+    batch_id=models.CharField(max_length=255,editable=False) 
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='in_progress')
     added_date = models.DateTimeField(default=timezone.now)
@@ -70,11 +72,20 @@ def add_products_to_master(sender, instance, **kwargs):
         master_instances = []
         # product_data = instance.product.get_product_data()
         for _ in range(instance.quantity_received):
+            master_data = {
+                'productindex_data': {
+                    'batch_id': str(instance.batch_id),
+                    'quantity_requested': instance.quantity_requested,
+                    'quantity_received': instance.quantity_received,
+                    'received_by': str(received_by),
+                    'arrive_date': instance.arrive_date.strftime('%Y-%m-%d %H:%M:%S'),
+                }
+            }
             master_instances.append(Master(
                 product=instance.product,
                 received_by=received_by,
                 batch_id=batch_id,
-                # data_json = product_data
+                data_json = master_data
             ))
         Master.objects.bulk_create(master_instances)
 

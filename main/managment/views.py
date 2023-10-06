@@ -37,6 +37,8 @@ def login_view(request):
                 return redirect('managment_home')
             elif group == 'inlet_user':
                 return redirect(('inlet_home'))
+            elif group == 'activators':
+                return redirect('list_batch')
             else:
                 return redirect('wating_feild')
         else:
@@ -111,7 +113,7 @@ def inquiry(request):
 
 
 @login_required(login_url='managment/login/')
-@allowed_users(allowed_roles=['admins', 'managment_user'])
+@allowed_users(allowed_roles=['admins', 'managment_user','activators'])
 def list_batch(request):
     product_indexes = ProductIndex.objects.all().order_by('-arrive_date')
 

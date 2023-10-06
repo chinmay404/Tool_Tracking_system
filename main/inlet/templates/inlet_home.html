@@ -1,41 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
 <style>
-    .container {
-        max-width: 90%;
-        margin: 0 auto;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    body {
+        background-color: #f8f8f8;
+        font-family: Arial, sans-serif;
     }
 
-    h1 {
-        text-align: center;
-        color: #333;
+    .container {
+        margin: 0 auto;
+        padding: 20px;
     }
 
     .heading-section {
         text-align: center;
         color: #333;
+        margin-bottom: 20px;
     }
 
     .search-bar {
-        margin-top: 20px;
-        text-align: center;
+        display: flex;
+        align-items: center;
     }
 
     .search-bar input {
-        width: 50%;
-        padding: 10px;
         font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        border: 1px solid #cccccc73;
+        border-radius: 1px;
     }
 
     .sorting-dropdown {
-        margin-top: 10px;
         text-align: right;
+    }
+
+    .heading-section {
+        text-align: left;
+        color: #333;
+        margin-top: 20px;
+        margin-left: 20px;
+        padding: 10px;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .container h1 {
+        text-align: center;
+        /* Center-align the text */
+        font-weight: bold;
+        /* Make the text bold */
+        font-size: 32px;
+        /* Adjust the font size as needed */
     }
 
     .sorting-dropdown label {
@@ -43,13 +56,9 @@
         font-weight: bold;
     }
 
-    .table-wrap {
-        margin-top: 20px;
-    }
-
-    /* Customize the table styles */
     .table {
-        width: 100%;
+        width: 98%;
+        margin: auto;
         margin-top: 10px;
         border-collapse: collapse;
     }
@@ -58,13 +67,18 @@
     .table td {
         padding: 12px;
         text-align: left;
-        border-top: 1px solid #0e0e0e;
     }
 
     .table th {
-        background-color: #000000;
-        color: #fff;
+        padding: 8px;
+        font-size: 16px;
+        text-align: left;
+        background-color: #f0f0f0;
+        color: rgb(74, 81, 88);
+        border-bottom: 1px solid rgb(254, 241, 213);
+        /* Add bottom border */
     }
+
 
     .table tbody tr:nth-child(odd) {
         background-color: rgba(0, 0, 0, 0.05);
@@ -72,39 +86,42 @@
 
     .table a {
         text-decoration: none;
-        color: #353535;
+        color: #007bff;
         font-weight: bold;
     }
 </style>
 
 <div class="container">
-    <h1>INLET HOME</h1>
-    <div class="heading-section">
-        <h1>Product Index List</h1>
-    </div>
+    <h1 style="font-size: 32px;">INLET HOME</h1>
+    <div class="tabel-container"
+        style="max-width: 98%; margin: auto; background-color: white; box-shadow: 0 0 0.875rem 0 rgba(33,37,41,.05);">
+        <div class="heading-section">
+            <h2 style="font-size: 22px;">Product Index List</h2>
+        </div>
+        <div class="search-bar">
+            <label for="s">Search: </label>
+            <div id="s" style="flex-grow: 1;">
+                <input type="text" id="searchInput" placeholder="Search...">
+            </div>
+            <div class="sorting-dropdown">
+                <label for="sort-select">Sort by:</label>
+                <select id="sort-select">
+                    <option value="id">ID</option>
+                    <option value="product">Product</option>
+                    <option value="quantity_requested">Quantity Requested</option>
+                    <option value="quantity_received">Quantity Received</option>
+                    <option value="batch_id">Batch ID</option>
+                    <option value="status">Status</option>
+                    <option value="received_by">Received By</option>
+                    <option value="arrive_date">Arrival Date</option>
+                </select>
+            </div>
+        </div>
 
-    <!-- Add the search bar -->
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search...">
-    </div>
 
-    <div class="sorting-dropdown">
-        <label for="sort-select">Sort by:</label>
-        <select id="sort-select">
-            <option value="id">ID</option>
-            <option value="product">Product</option>
-            <option value="quantity_requested">Quantity Requested</option>
-            <option value="quantity_received">Quantity Received</option>
-            <option value="batch_id">Batch ID</option>
-            <option value="status">Status</option>
-            <option value="received_by">Received By</option>
-            <option value="arrive_date">Arrival Date</option>
-        </select>
-    </div>
-
-    <div class="table-wrap">
         <table class="table">
-            <thead class="thead-dark">
+
+            <thead class="thead-light">
                 <tr>
                     <th data-sort="id">ID</th>
                     <th data-sort="product">Product</th>
@@ -128,7 +145,6 @@
                     <td>{{ product_index.status }}</td>
                     <td>{{ product_index.received_by }}</td>
                     <td>{{ product_index.arrive_date }}</td>
-
                 </tr>
                 {% endfor %}
             </tbody>
@@ -208,7 +224,4 @@
         });
     });
 </script>
-
-
-
 {% endblock %}

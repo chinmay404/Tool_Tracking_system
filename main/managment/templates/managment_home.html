@@ -4,15 +4,17 @@
     .container {
         max-width: 90%;
         margin: 0 auto;
-        background-color: #fff;
+        background-color: #f9f9f9;
         padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
         text-align: center;
         color: #333;
+        font-size: 32px;
+        margin-bottom: 20px;
     }
 
     .actions {
@@ -24,6 +26,7 @@
         margin-left: 10px;
         text-decoration: none;
         color: #007BFF;
+        font-weight: bold;
     }
 
     .product-list {
@@ -32,6 +35,8 @@
 
     .product-list h2 {
         color: #333;
+        font-size: 24px;
+        margin-bottom: 10px;
     }
 
     /* Customize the table styles */
@@ -45,12 +50,17 @@
     .table td {
         padding: 12px;
         text-align: left;
-        border-top: 1px solid #0e0e0e;
+        border-top: 1px solid #ccc;
     }
 
     .table th {
-        background-color: #000000;
-        color: #fff;
+        padding: 8px;
+        font-size: 16px;
+        text-align: left;
+        background-color: #f0f0f0;
+        color: rgb(74, 81, 88);
+        border-bottom: 1px solid rgb(254, 241, 213);
+        /* Add bottom border */
     }
 
     .table tbody tr:nth-child(odd) {
@@ -59,22 +69,57 @@
 
     .table a {
         text-decoration: none;
-        color: #353535;
+        color: #007BFF;
+        font-weight: bold;
+    }
+
+    /* New table theme */
+    .table-new {
+        background-color: #fff;
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+    }
+
+    .table-new th,
+    .table-new td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table-new th {
+        padding: 8px;
+        font-size: 16px;
+        text-align: left;
+        background-color: #f0f0f0;
+        color: rgb(74, 81, 88);
+        border-bottom: 1px solid rgb(254, 241, 213);
+        /* Add bottom border */
+    }
+
+    .table-new tbody tr:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
+
+    .table-new a {
+        text-decoration: none;
+        color: #007BFF;
         font-weight: bold;
     }
 </style>
 
 <div class="container">
-    <h1>MANAGEMENT HOME</h1>
+    <h1>Management Home</h1>
     <div class="actions">
         <a href="{% url 'inquiry' %}" class="action-link">Inquiry</a>
         <a href="{% url 'logout' %}" class="action-link">Logout</a>
-        <a href="{% url 'admin_only' %}" class="action-link">ADMIN ONLY</a>
+        <a href="{% url 'admin_only' %}" class="action-link">Admin Only</a>
     </div>
 
     <div class="product-list">
-        <h2>ACTIVE BATCH</h2>
-        <table class="table table-striped">
+        <h2>Active Batch</h2>
+        <table class="table-new">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -91,7 +136,8 @@
                 {% for product_index in activated_product_index %}
                 <tr>
                     <td>{{ product_index.id }}</td>
-                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a></td>
+                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a>
+                    </td>
                     <td>{{ product_index.quantity_requested }}</td>
                     <td>{{ product_index.quantity_received }}</td>
                     <td>{{ product_index.batch_id }}</td>
@@ -105,8 +151,8 @@
     </div>
 
     <div class="product-list">
-        <h2>DEACTIVE BATCH</h2>
-        <table class="table table-striped">
+        <h2>Deactive Batch</h2>
+        <table class="table-new">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -123,7 +169,8 @@
                 {% for product_index in deactive_product_index %}
                 <tr>
                     <td>{{ product_index.id }}</td>
-                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a></td>
+                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a>
+                    </td>
                     <td>{{ product_index.quantity_requested }}</td>
                     <td>{{ product_index.quantity_received }}</td>
                     <td>{{ product_index.batch_id }}</td>
