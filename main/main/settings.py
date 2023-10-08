@@ -40,7 +40,7 @@ DEBUG = True
 
 local_ip = socket.gethostbyname(socket.gethostname())
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', local_ip,'192.168.1.4','192.168.60.63']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', local_ip,'192.168.1.4','192.168.60.63','192.168.1.7']
 print(f'Allowed Hosts : {ALLOWED_HOSTS}')
 
 # Application definition

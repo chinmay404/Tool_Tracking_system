@@ -29,11 +29,10 @@ def generate_qr_code(url, id, filename):
     
 def main():
     inp_id = input('uuid Id : ')
-    url = f'http://192.168.1.4:8000/api/get/product/{inp_id}'
+    inp_id = inp_id.replace(' ', '')
+    url = f'http://192.168.1.7:8000/api/get/product/{inp_id}'
     generate_qr_code(url,inp_id,filename='view')
-    url = f'http://192.168.1.4:8000/api/activate/product/{inp_id}'
-    generate_qr_code(url,inp_id,filename='Acvate')
-         
+
     
     
     

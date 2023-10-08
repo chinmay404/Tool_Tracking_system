@@ -39,12 +39,17 @@ def home(request):
 @allowed_users(['admins', 'inlet_user'])
 def create_product_index(request):
     if request.method == 'POST':
-        form = ProductIndexForm(request.POST)
-        if form.is_valid():
-            received_by = request.user
-            form.instance.received_by = received_by 
-            form.save()
+        try:
+            form = ProductIndexForm(request.POST)
+            if form.is_valid():
+                received_by = request.user
+                form.instance.received_by = received_by 
+                form.save()
             return redirect('inlet_home')
+        except Exception as E:
+            print("ERRORRRRRRRRRRRR : ",E)
+            pass
+        
     else:
         form = ProductIndexForm()
 
