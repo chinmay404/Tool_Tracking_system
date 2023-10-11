@@ -30,7 +30,7 @@ def generate_qr_code(url, id, filename):
 def main():
     inp_id = input('uuid Id : ')
     inp_id = inp_id.replace(' ', '')
-    url = f'http://192.168.1.7:8000/api/get/product/{inp_id}'
+    url = f'http://192.168.1.6:8000/api/get/product/{inp_id}'
     generate_qr_code(url,inp_id,filename='view')
 
     

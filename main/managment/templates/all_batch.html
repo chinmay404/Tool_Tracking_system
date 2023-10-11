@@ -92,7 +92,7 @@
 </style>
 
 <div class="container">
-    <h1 style="font-size: 32px;">INLET HOME</h1>
+    <h1 style="font-size: 32px;">All Batches</h1>
     <div class="tabel-container"
         style="max-width: 98%; margin: auto; background-color: white; box-shadow: 0 0 0.875rem 0 rgba(33,37,41,.05);">
         <div class="heading-section">
@@ -104,21 +104,24 @@
                 <input type="text" id="searchInput" placeholder="Search...">
             </div>
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                  sort
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    sort
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                  <li><button class="dropdown-item" type="button"><a class="dropdown-item" href="?sort_by=arrive_date">Arrival Date (New First)</a></button></li>
-                  <li><button class="dropdown-item" type="button"><a class="dropdown-item" href="?sort_by=-arrive_date">Arrival Date (Old First)</a></button></li>
-                  <!-- <li><button class="dropdown-item" type="button">Something else here</button></li> -->
+                    <li><button class="dropdown-item" type="button"><a class="dropdown-item"
+                                href="?sort_by=arrive_date">Arrival Date (New First)</a></button></li>
+                    <li><button class="dropdown-item" type="button"><a class="dropdown-item"
+                                href="?sort_by=-arrive_date">Arrival Date (Old First)</a></button></li>
+                    <!-- <li><button class="dropdown-item" type="button">Something else here</button></li> -->
                 </ul>
-              </div>
+            </div>
 
 
         </div>
 
-        
-        
+
+
         <table class="table">
 
             <thead class="thead-light">
@@ -131,11 +134,11 @@
                     <th data-sort="status">Status</th>
                     <th data-sort="received_by">Received By</th>
                     <th data-sort="arrive_date">Arrival Date</th>
-                </tr>
             </thead>
             <tbody>
                 {% for product_index in product_indexes %}
-                <tr>
+                {% if product_index.status=='in_progress' %}
+                <tr style="color: rgb(249, 173, 173);">
                     <td>{{ product_index.id }}</td>
                     <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a>
                     </td>
@@ -146,6 +149,7 @@
                     <td>{{ product_index.received_by }}</td>
                     <td>{{ product_index.arrive_date }}</td>
                 </tr>
+                {% endfor %}
                 {% endfor %}
             </tbody>
         </table>
@@ -173,6 +177,7 @@
             const searchValue = searchInput.value.trim();
             filterTable(searchValue);
         });
+        
     });
 </script>
 

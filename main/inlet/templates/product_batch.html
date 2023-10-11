@@ -1,11 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <center>
-    <h1>Products from Batch {{ batch_id_info }}</h1>
+    <h1>Products from Batch </h1>
+    <p>{{ batch_id_info }}</p>
 </center>
 <div class="container">
-    <h1 class="heading-section">Product List</h1>
+    <p><h3>Product Details : </h3></p>
+    <div class="container">
+        <div class="row">
+          <div class="col">Recived By : {{ Received_By }}</div>
+
+          <div class="w-100"></div>
+          <div class="col">Recived Date : {{ Received_Date }}</div>
+          <div class="col"> {% for count_item in product_counts %}
+            {{ count_item.status }}: {{ count_item.count }}<br>
+            {% endfor %}</div>
+        </div>
+      </div>
     <div class="table-wrap">
         <table class="table">
             <thead class="thead-dark">
@@ -27,6 +40,7 @@
                     <!-- <td>{{ master.batch_id }}</td> -->
                     <td>{{ master.added_date }}</td>
                     <td>{{ master.received_by }}</td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>

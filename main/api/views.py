@@ -43,7 +43,12 @@ def activate_product(request, uuid):
                 master_product.data_json = current_data
                 master_product.save()
                 message = f'Product with UUID {uuid} has been activated.'
-                return redirect('blank', {'message': message})
+                
+                # Construct the URL for the get_product view with the UUID parameter
+                get_product_url = reverse('blank', args=[uuid])
+                
+                # Redirect to the get_product view
+                return redirect(get_product_url, {'message': message})
             except Exception as e:
                 pass
         else:

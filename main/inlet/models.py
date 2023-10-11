@@ -24,10 +24,12 @@ class ProductIndex(models.Model):
     STATUS_CHOICES = [
         ('active', 'Active'),
         ('deactive', 'Deactive'),
+        ('in_progress', 'In Progress'),
+        ('dead', 'Dead'),
     ]
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, default='deactive')
+        max_length=20, choices=STATUS_CHOICES, default='in_progress')
     batch_id = models.UUIDField(default=uuid4, unique=True, editable=False) 
     quantity_requested = models.PositiveIntegerField()
     quantity_received = models.PositiveIntegerField()
@@ -100,7 +102,12 @@ def add_products_to_master(sender, instance, **kwargs):
 @receiver(pre_save, sender=Master)
 def update_product_index_status(sender, instance, **kwargs):
     if instance.status == 'active':
-        active_masters_count = Master.objects.filter(product=instance.product, status='active').count()
-        total_masters_count = Master.objects.filter(product=instance.product).count()
-        if active_masters_count == total_masters_count:
-            ProductIndex.objects.filter(product=instance.product).update(status='active')
+        instance_batch_id = instance.batch_id
+        active_masters_count = Master.objects.filter(batch_id=instance_batch_id, status='active').count()
+        print(f'[status]  Active Count : {active_masters_count}')
+        total_masters_count = Master.objects.filter(batch_id=instance_batch_id).count()
+        print(f'[status]  total_masters_count In Batch : {total_masters_count}')
+        
+        if active_masters_count == total_masters_count-1:
+            ProductIndex.objects.filter(batch_id=instance_batch_id).update(status='active')
+            print("Updated ProductIndex status to 'active'")

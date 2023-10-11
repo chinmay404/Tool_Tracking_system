@@ -116,9 +116,26 @@
         <a href="{% url 'logout' %}" class="action-link">Logout</a>
         <a href="{% url 'admin_only' %}" class="action-link">Admin Only</a>
     </div>
-
+    <div class="search-bar">
+        <label for="s">Search: </label>
+        <div id="s" style="flex-grow: 1;">
+            <input type="text" id="searchInput" placeholder="Search...">
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                sort
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li><button class="dropdown-item" type="button"><a class="dropdown-item"
+                            href="?sort_by=arrive_date">Arrival Date (New First)</a></button></li>
+                <li><button class="dropdown-item" type="button"><a class="dropdown-item"
+                            href="?sort_by=-arrive_date">Arrival Date (Old First)</a></button></li>
+            </ul>
+        </div>
+    </div>
     <div class="product-list">
-        <h2>Active Batch</h2>
+        <h2>Ready Batch</h2>
         <table class="table-new">
             <thead>
                 <tr>
@@ -149,38 +166,28 @@
             </tbody>
         </table>
     </div>
-
-    <div class="product-list">
-        <h2>Deactive Batch</h2>
-        <table class="table-new">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Product Name</th>
-                    <th>Requested Quantity</th>
-                    <th>Received Quantity</th>
-                    <th>Batch ID</th>
-                    <th>Status</th>
-                    <th>Received By</th>
-                    <th>Arrival Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product_index in deactive_product_index %}
-                <tr>
-                    <td>{{ product_index.id }}</td>
-                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a>
-                    </td>
-                    <td>{{ product_index.quantity_requested }}</td>
-                    <td>{{ product_index.quantity_received }}</td>
-                    <td>{{ product_index.batch_id }}</td>
-                    <td>{{ product_index.status }}</td>
-                    <td>{{ product_index.received_by }}</td>
-                    <td>{{ product_index.arrive_date }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
 </div>
-{% endblock %}
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const table = document.querySelector('.table');
+            const tbody = table.querySelector('tbody');
+            function filterTable(searchValue) {
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+
+                rows.forEach(row => {
+                    const rowData = Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.toLowerCase());
+                    if (rowData.some(data => data.includes(searchValue.toLowerCase()))) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+            searchInput.addEventListener('input', () => {
+                const searchValue = searchInput.value.trim();
+                filterTable(searchValue);
+            });
+        });
+    </script>
+    {% endblock %}

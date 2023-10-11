@@ -16,7 +16,6 @@ def home(request):
     deactive_product_index = ProductIndex.objects.filter(status='deactive')
     context = {
         'activated_product_index':activated_product_index,
-        'deactive_product_index' : deactive_product_index
     }
 
     return render(request, 'managment_home.html', context)
@@ -122,3 +121,7 @@ def list_batch(request):
     }
 
     return render(request, 'list_batch.html', context)
+
+
+
+

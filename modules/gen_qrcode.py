@@ -36,7 +36,7 @@ def main():
         for row in csv_reader:
             if row:  
                 id = row[0]
-                url = f'http://192.168.60.63:8000/api/get/product/{id}'
+                url = f'http://192.168.1.6:8000/api/get/product/{id}'
                 # else:
                 #     url= f'http://192.168.60.63:8000/api/activate/product/{id}'
                 generate_qr_code(url, id, temp_dir)

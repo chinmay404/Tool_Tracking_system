@@ -9,6 +9,7 @@ import csv
 from django.utils import timezone
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.db.models import Count
 
 # Create your views here.
 
@@ -22,17 +23,23 @@ def home(request):
         {'url': 'create_product_index', 'text': 'Index New Product'},
         {'url': 'list_masters', 'text': 'List Master'},
     ]
-    product_indexes = ProductIndex.objects.all().order_by('-arrive_date')
+
+    # Get the sorting parameter from the URL (default to '-arrive_date' if not provided)
+    sort_by = request.GET.get('sort_by', '-arrive_date',)
+
+    # Query the ProductIndex objects, ordered by the sorting parameter
+    product_indexes = ProductIndex.objects.all().order_by(sort_by)
 
     context = {
         'username': username,
         'email': email,
         'sidebar': sidebar,
-        'product_indexes': product_indexes
-        
+        'product_indexes': product_indexes,
+        'current_sort': sort_by,
     }
 
     return render(request, 'inlet_home.html', context)
+
 
 
 @login_required(login_url='managment/login/')
@@ -105,9 +112,28 @@ def product_quantity(request, product_id):
 @allowed_users(['admins', 'inlet_user', 'managment_user','activators'])
 def product_batch(request, batch_id):
     products = Master.objects.filter(batch_id=batch_id)
+    
+    # Initialize variables to None
+    Received_By = None
+    Received_Date = None
+
+    if products.exists():  # Check if there are products in the batch
+        first_product = products.first()  # Get the first product in the batch
+        Received_By = first_product.received_by
+        Received_Date = first_product.added_date.strftime('%Y-%m-%d %H:%M:%S')
+        product_counts = (
+        Master.objects
+        .filter(batch_id=batch_id)
+        .values('status')
+        .annotate(count=Count('status'))
+    )
+
     context = {
         'products': products,
-        'batch_id_info': batch_id,  
+        'product_counts': product_counts,
+        'batch_id_info': batch_id,
+        'Received_By': Received_By,
+        'Received_Date': Received_Date,
     }
     return render(request, 'product_batch.html', context)
 
@@ -150,6 +176,7 @@ def download_id(request, master_id):
 def activation(request):
     if request.method == 'POST':
         uuid_to_activate = request.POST.get('uuid_to_activate').replace(" ", "")
+        uuid_to_activate = uuid_to_activate.replace(" ", "")
         try:
             master_product = Master.objects.get(uuid=uuid_to_activate)
             if request.user.has_perm('inlet.change_master'):

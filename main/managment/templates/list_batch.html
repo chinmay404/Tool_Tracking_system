@@ -123,17 +123,15 @@
             </thead>
             <tbody>
                 {% for product_index in product_indexes %}
-                <tr>
+                <tr style="{% if product_index.status == 'in_progress' %}background-color: rgb(243, 148, 148);{% endif %}">
                     <td>{{ product_index.id }}</td>
-                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a>
-                    </td>
+                    <td><a href="{% url 'product_batch' product_index.batch_id %}">{{ product_index.product.name }}</a></td>
                     <td>{{ product_index.quantity_requested }}</td>
                     <td>{{ product_index.quantity_received }}</td>
                     <td>{{ product_index.batch_id }}</td>
                     <td>{{ product_index.status }}</td>
                     <td>{{ product_index.received_by }}</td>
                     <td>{{ product_index.arrive_date }}</td>
-
                 </tr>
                 {% endfor %}
             </tbody>
@@ -213,7 +211,5 @@
         });
     });
 </script>
-
-
 
 {% endblock %}

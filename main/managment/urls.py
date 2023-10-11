@@ -16,5 +16,6 @@ urlpatterns = [
     path('wating_feild/', views.wating_feild, name='wating_feild'),
     path('inquiry/', views.inquiry, name='inquiry'),
     path('list_batch/', views.list_batch, name='list_batch'),
+
     
 ]
