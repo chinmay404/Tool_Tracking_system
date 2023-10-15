@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1>All Batches</h1>
+
+    <form method="GET" class="search-form">
+        <label for="filter_date">Filter by Date:</label>
+        <input type="date" name="filter_date" id="filter_date" value="{{ filter_date }}">
+        <button type="submit">Filter</button>
+    </form>
+
+    <form method="GET" class="search-form">
+        <label for="search_query">Search Batch:</label>
+        <input type="text" name="search_query" id="search_query" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Arrival Date</th>
+                <th>Batch ID</th>
+                <th>Status</th>
+                <!-- Add more table headers for other batch information -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for batch in all_batches %}
+            <tr>
+                <td>{{ batch.product.name }}</td>
+                <td>{{ batch.arrive_date }}</td>
+                <td><a href="{% url 'batch_detail' batch.batch_id %}">{{ batch.batch_id }}</a></td>
+                <td>{{ batch.status }}</td>
+                <!-- Add more table cells for other batch information -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .container {
+        margin: 20px;
+        padding: 20px;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .search-form {
+        margin-bottom: 10px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>
+{% endblock %}

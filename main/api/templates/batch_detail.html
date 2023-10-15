@@ -1,0 +1,68 @@
+<!-- batch_detail.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1>Masters for Batch ID: {{ batch_id }}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>UUID</th>
+                <th>Status</th>
+                <th>Added Date</th>
+                <!-- Add more table headers for other master information -->
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for master in masters %}
+            {% if master.status == 'in_progress' %}
+            <tr>
+                <td style="color: red;"><a href="{% url 'activate_master' uuid=master.uuid %}">{{ master.uuid }}</a></td>
+
+                <td>{{ master.status }}</td>
+                <td>{{ master.added_date }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td>{{ master.uuid }}</td>
+                <td style="color: green;">{{ master.status }}</td>
+                <td>{{ master.added_date }}</td>
+
+            </tr>
+            {% endif %}
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .container {
+        margin: 20px;
+        padding: 20px;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>
+{% endblock %}

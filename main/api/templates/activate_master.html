@@ -1,0 +1,11 @@
+<!-- activate_product.html -->
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Activate Product</h1>
+    <form method="post" id="activation-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Activate</button>
+    </form>
+    <div id="result"></div>
+{% endblock %}
