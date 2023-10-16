@@ -115,7 +115,6 @@ def api_home(request):
 
 
 def batch_detail(request, batch_id):
-    # Retrieve all masters with the selected batch ID
     masters = Master.objects.filter(batch_id=batch_id)
 
     context = {

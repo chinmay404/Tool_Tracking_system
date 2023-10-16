@@ -109,8 +109,8 @@
                     <a href="{% url 'list_masters' %}" class="list-group-item list-group-item-action py-2 ripple">
                         List Master
                     </a>
-                    <a href="{% url 'activation' %}" class="list-group-item list-group-item-action py-2 ripple">
-                        Product Activation
+                    <a href="{% url 'api_home' %}" class="list-group-item list-group-item-action py-2 ripple">
+                        Product Activation API
                     </a>
                     {% endif %}
                     {% if user.groups.first.name == 'admins' or user.groups.first.name == 'managment_user' %}

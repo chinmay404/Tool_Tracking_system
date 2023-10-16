@@ -13,6 +13,12 @@
                     <strong>Product Name:</strong> {{ product.product.name }}
                 </li>
                 <li class="list-group-item">
+                    <strong>Product ID:</strong> {{ product.product.product_id }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Supplier :</strong> {{ product.product.supplier_name }}
+                </li>
+                <li class="list-group-item">
                     <strong>Status:</strong> {{ product.status }}
                 </li>
                 <li class="list-group-item">
@@ -33,11 +39,4 @@
         </div>
     </div>
 </div>
-{% if user.groups.first.name == 'admins' or user.groups.first.name == 'inlet_user' or user.groups.first.name == 'activators'%}
-<div class="container mt-3">
-    <center>
-        <a href="{% url 'download_id' product.uuid %}" class="btn btn-primary">Download Unique IDs</a>
-    </center>
-</div>
-{% endif %}
 {% endblock %}

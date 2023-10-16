@@ -1,5 +1,5 @@
 
-from django.urls import path
+from django.urls import path,include
 from . import views
 
 
@@ -16,7 +16,7 @@ urlpatterns = [
     path('wating_feild/', views.wating_feild, name='wating_feild'),
     path('inquiry/', views.inquiry, name='inquiry'),
     path('list_batch/', views.list_batch, name='list_batch'),
-    path('api/', views.list_batch, name='api'),
-
+    path('api/', include('api.urls')),
+    path('inventory_detail/<int:product_id>/', views.inventory_detail, name='inventory_detail'),
     
 ]

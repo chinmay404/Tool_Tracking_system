@@ -5,20 +5,41 @@ from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm, CustomUserAuthenticationForm
 from .decorators import unauth_user, allowed_users
 from django.contrib.auth.models import Group
-from inlet.models import Master,ProductIndex
+from inlet.models import Master,ProductIndex,Product
 from django.db.models import Q
+from django.db.models import Count, Case, When, IntegerField
 
 
 @login_required(login_url='managment/login/')
 @allowed_users(allowed_roles=['admins', 'managment_user',])
 def home(request):
     activated_product_index = ProductIndex.objects.filter(status='active')
-    deactive_product_index = ProductIndex.objects.filter(status='deactive')
+    products = Product.objects.all()
+    
     context = {
         'activated_product_index':activated_product_index,
+        'products': products,
     }
 
     return render(request, 'managment_home.html', context)
+
+
+
+@login_required(login_url='managment/login/')
+@allowed_users(allowed_roles=['admins', 'managment_user',])
+def inventory_detail(request, product_id):
+    masters = Master.objects.filter(product__product_id=product_id)
+    masters_count = masters.count()
+    
+    
+    context = {
+        'masters': masters,
+        'masters_count': masters_count,
+    }
+    return render(request, 'inventory_detail.html', context)
+
+
+
 
 
 @unauth_user  # IF User is Already Logged in no need to go for login page again

@@ -115,7 +115,7 @@
         <a href="{% url 'inquiry' %}" class="action-link">Inquiry</a>
         <a href="{% url 'logout' %}" class="action-link">Logout</a>
         <a href="{% url 'admin_only' %}" class="action-link">Admin Only</a>
-        <a href="{% url 'api' %}" class="action-link">API</a>
+        <a href="{% url 'api_home' %}" class="action-link">API</a>
     </div>
     <div class="search-bar">
         <label for="s">Search: </label>
@@ -168,27 +168,52 @@
         </table>
     </div>
 </div>
+<div class="Inventory">
+    <h1>INVENTORY</h1>
+    <div class="product-list">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Supplier</th>
+                    <th>Description</th>
+                    <th>Product ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td><a href="{% url 'inventory_detail' product.product_id %}">{{ product.name }}</a></td>
+                    <td>{{ product.supplier_name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.product_id }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('searchInput');
-            const table = document.querySelector('.table');
-            const tbody = table.querySelector('tbody');
-            function filterTable(searchValue) {
-                const rows = Array.from(tbody.querySelectorAll('tr'));
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const table = document.querySelector('.table');
+        const tbody = table.querySelector('tbody');
+        function filterTable(searchValue) {
+            const rows = Array.from(tbody.querySelectorAll('tr'));
 
-                rows.forEach(row => {
-                    const rowData = Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.toLowerCase());
-                    if (rowData.some(data => data.includes(searchValue.toLowerCase()))) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            }
-            searchInput.addEventListener('input', () => {
-                const searchValue = searchInput.value.trim();
-                filterTable(searchValue);
+            rows.forEach(row => {
+                const rowData = Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.toLowerCase());
+                if (rowData.some(data => data.includes(searchValue.toLowerCase()))) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
             });
+        }
+        searchInput.addEventListener('input', () => {
+            const searchValue = searchInput.value.trim();
+            filterTable(searchValue);
         });
-    </script>
-    {% endblock %}
+    });
+</script>
+{% endblock %}

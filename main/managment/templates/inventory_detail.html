@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Products and Their Master Records</h1>
+<p>COUNT : {{ masters_count }}</p>
+<p>stats : {{ stats }}</p>
+<table>
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Master UUID</th>
+            <th>Status</th>
+            <th>Added Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for master in masters %}
+        <tr>
+            <td>{{ master.product.name }}</td>
+            <td><a href="{% url 'view_product' master.uuid %}">{{ master.uuid }}</a></td>
+            <td>{{ master.status }}</td>
+            <td>{{ master.added_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

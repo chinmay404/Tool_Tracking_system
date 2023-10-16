@@ -47,11 +47,4 @@
         </table>
     </div>
 </div>
-{% if user.groups.first.name == 'admins' or user.groups.first.name == 'inlet_user' or user.groups.first.name == 'activators'%}
-<center>
-    <div class="container">
-        <a href="{% url 'download_ids' batch_id_info %}" class="btn btn-primary">Download Unique IDs</a>
-    </div>
-</center>
-{% endif %}
 {% endblock %}
