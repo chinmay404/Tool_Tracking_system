@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Outlet Home</h1>
+
+<h2>Sale Orders</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>GRN Number</th>
+            <th>PO Number</th>
+            <th>Bill No</th>
+            <th>Vehicle No</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale_order in sale_orders %}
+            <tr>
+                <td><a href="{% url 'sale_order_detail' sale_order.id %}">{{ sale_order.grn_number }}</a></td>
+                <td>{{ sale_order.po_number }}</td>
+                <td>{{ sale_order.bill_no }}</td>
+                <td>{{ sale_order.vehicle_no }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

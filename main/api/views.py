@@ -5,13 +5,16 @@ from inlet.models import Master
 from .serializers import ItemSerializer
 from django.utils import timezone
 from django.shortcuts import render, redirect, HttpResponse ,get_object_or_404
-from django.urls import reverse  # Import reverse to generate the URL
+from django.urls import reverse 
 from rest_framework.renderers import TemplateHTMLRenderer
 from inlet.models import ProductIndex
 from django.contrib.auth.decorators import login_required
 from managment.decorators import *
 from datetime import datetime, timedelta
 from .forms import ActivationForm
+from rest_framework import status
+from rest_framework.views import APIView
+
 
 
 
@@ -140,3 +143,18 @@ def activate_master(request, uuid):
         form = ActivationForm()
 
     return render(request, 'activate_master.html', {'form': form})
+
+
+
+
+
+
+# OUTLET APIS
+
+class CreateOrder(APIView):
+    def post(self, request):
+        serializer = OrderSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

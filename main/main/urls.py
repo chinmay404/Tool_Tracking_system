@@ -9,5 +9,6 @@ urlpatterns = [
     path('managment/', include('managment.urls')),
     path('inlet/', include('inlet.urls')),
     path('api/', include('api.urls')),
+    path('outlet/', include('outlet.urls')),
     path('', RedirectView.as_view(pattern_name='managment_home', permanent=False)),  
 ]

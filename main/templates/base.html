@@ -125,6 +125,14 @@
                     <a href="{% url 'inquiry' %}" class="list-group-item list-group-item-action py-2 ripple">
                         Inquiry
                     </a>
+                    <a href="{% url 'outlet_home' %}"
+                        class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+                        outlet home
+                    </a>
+                    <a href="{% url 'creat_saleorder' %}"
+                        class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+                        creat_saleorder
+                    </a>
                     {% endif %}
                     {% if user.groups.first.name == 'activators' %}
                     <a href="{% url 'list_batch' %}" class="list-group-item list-group-item-action py-2 ripple">
