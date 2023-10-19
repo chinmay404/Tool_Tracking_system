@@ -1,43 +1,45 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Sale Order Details</h1>
+<h1>Sale Order Details</h1>
 
-    <table>
-        <tr>
-            <th>GRN Number:</th>
-            <td>{{ sale_order.grn_number }}</td>
-        </tr>
-        <tr>
-            <th>PO Number:</th>
-            <td>{{ sale_order.po_number }}</td>
-        </tr>
-        <tr>
-            <th>Bill No:</th>
-            <td>{{ sale_order.bill_no }}</td>
-        </tr>
-        <tr>
-            <th>Vehicle No:</th>
-            <td>{{ sale_order.vehicle_no }}</td>
-        </tr>
-    </table>
+<table>
+    <tr>
+        <th>GRN Number:</th>
+        <td>{{ sale_order.grn_number }}</td>
+    </tr>
+    <tr>
+        <th>PO Number:</th>
+        <td>{{ sale_order.po_number }}</td>
+    </tr>
+    <tr>
+        <th>Bill No:</th>
+        <td>{{ sale_order.bill_no }}</td>
+    </tr>
+    <tr>
+        <th>Vehicle No:</th>
+        <td>{{ sale_order.vehicle_no }}</td>
+    </tr>
+</table>
 
-    <h2>Sale Order Products</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for sale_order_product in sale_order.saleorderproduct_set.all %}
-                <tr>
-                    <td>{{ sale_order_product.product.name }}</td>
-                    <td>{{ sale_order_product.quantity }}</td>
-                    <td>{{ sale_order_product.status }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<h2>Sale Order Products</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>status</th>
+            <th>Product ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale_order_product in sale_order.saleorderproduct_set.all %}
+        <tr>
+            <td><a href="{% url 'sale_order_product_detail' sale_order.bill_no sale_order_product.product_id %}">{{sale_order_product.product.name }}</a></td>
+            <td>{{ sale_order_product.quantity }}</td>
+            <td>{{ sale_order_product.status }}</td>
+            <td>{{ sale_order_product.product_id }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

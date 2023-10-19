@@ -7,18 +7,18 @@
 <table>
     <thead>
         <tr>
+            <th>Bill No</th>
             <th>GRN Number</th>
             <th>PO Number</th>
-            <th>Bill No</th>
             <th>Vehicle No</th>
         </tr>
     </thead>
     <tbody>
         {% for sale_order in sale_orders %}
             <tr>
-                <td><a href="{% url 'sale_order_detail' sale_order.id %}">{{ sale_order.grn_number }}</a></td>
+                <td><a href="{% url 'sale_order_detail' sale_order.bill_no %}">{{ sale_order.bill_no }}</a></td>
+                <td>{{ sale_order.grn_number }}</a></td>
                 <td>{{ sale_order.po_number }}</td>
-                <td>{{ sale_order.bill_no }}</td>
                 <td>{{ sale_order.vehicle_no }}</td>
             </tr>
         {% endfor %}

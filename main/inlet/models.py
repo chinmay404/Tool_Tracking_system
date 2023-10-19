@@ -12,7 +12,7 @@ from django.db.models.signals import pre_save
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    product_id = models.PositiveIntegerField()
+    product_id = models.PositiveIntegerField(primary_key=True)
     supplier_name = models.CharField(max_length=100)
     description = models.TextField()
 

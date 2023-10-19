@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <h1 class="mb-4">Product Details</h1>
+    <div class="card mb-4">
+      <div class="card-body">
+        <h2>{{ sale_order_product.name }}</h2>
+        <p><strong>Supplier:</strong> {{ sale_order_product.supplier_name }}</p>
+        <p><strong>Description:</strong> {{ sale_order_product.description }}</p>
+        <p><strong>Requested quantity:</strong> {{ sale_order_product.quantity }}</p>
+        <p><strong>Inventory count:</strong> {{ inventory_count }}</p>
+
+        <!-- Display the UUIDs -->
+        <h3 class="mt-3">UUIDs of Product's Masters:</h3>
+        <ul>
+          {% for uuid in selected_master_uuids %}
+            <li>{{ uuid }}</li>
+          {% endfor %}
+        </ul>
+
+        <!-- Add a link to go back to the Sale Order details page -->
+        <p><strong>Selected ID: </strong> <a href="{% url 'sale_order_detail' sale_order.bill_no %}">Back to Sale Order</a></p>
+      </div>
+    </div>
+
+    {% if inventory_count == 0 or inventory_count < sale_order_product.quantity %}
+      <div class="alert alert-danger" role="alert">
+        Not Enough Material In Inventory
+      </div>
+    {% else %}
+      <form method="post" action="{% url 'add_uuid' sale_order.bill_no sale_order_product.product_id %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="new_uuid">Add a UUID:</label>
+          <input type="text" class="form-control" id="new_uuid" name="new_uuid">
+        </div>
+        <button type="submit" class="btn btn-primary">Add UUID</button>
+      </form>
+      <form method="post" action="{% url 'save_and_return' sale_order.bill_no sale_order_product.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success mt-2">Save and Return</button>
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}
