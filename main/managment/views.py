@@ -10,6 +10,9 @@ from django.db.models import Q
 from django.db.models import Count, Case, When, IntegerField
 
 
+
+
+
 @login_required(login_url='managment/login/')
 @allowed_users(allowed_roles=['admins', 'managment_user',])
 def home(request):
@@ -30,11 +33,14 @@ def home(request):
 def inventory_detail(request, product_id):
     masters = Master.objects.filter(product__product_id=product_id)
     masters_count = masters.count()
+    product = Product.objects.filter(product_id=product_id)
+    
     
     
     context = {
         'masters': masters,
         'masters_count': masters_count,
+        'product':product
     }
     return render(request, 'inventory_detail.html', context)
 
@@ -59,6 +65,8 @@ def login_view(request):
                 return redirect(('inlet_home'))
             elif group == 'activators':
                 return redirect('list_batch')
+            elif  group == 'outlet_user':
+                return redirect('outlet_home')
             else:
                 return redirect('wating_feild')
         else:

@@ -39,6 +39,18 @@ class SaleOrder(models.Model):
         else:
             self.status = 'pending'
 
+        # self.update_uuids()  
+
         super(SaleOrder, self).save(*args, **kwargs)
 
+    # def update_uuids(self):
+    #     all_uuids = []
 
+    #     for product in self.products.all():
+    #         all_uuids.extend(product.saleorderproduct_set.values_list('uuids', flat=True))
+
+    #     # Remove duplicates and empty UUIDs
+    #     all_uuids = list(set(filter(None, all_uuids)))
+
+    #     # Update the uuids field using update method
+    #     self.__class__.objects.filter(pk=self.pk).update(uuids=all_uuids)

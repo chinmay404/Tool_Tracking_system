@@ -32,8 +32,14 @@
                     <ul class="list-unstyled">
                         {% for key, value in product.data_json.items %}
                         <li><strong>{{ key }}:</strong> {{ value }}</li>
+                        <br><br>
                         {% endfor %}
                     </ul>
+                </li>
+                <li class="list-group-item">
+                    <strong>Whole Data JSON:</strong>
+                    {{ product.data_json }}
+                    
                 </li>
             </ul>
         </div>

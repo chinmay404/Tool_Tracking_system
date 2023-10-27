@@ -77,11 +77,13 @@
         .user-info {
             font-size: 15px;
         }
-        .list-group-flush>.list-group-item{
-            background-color: rgb(34,46,60);
+
+        .list-group-flush>.list-group-item {
+            background-color: rgb(34, 46, 60);
             color: rgba(245, 245, 245, 0.575);
         }
-        .list-group-flush>.list-group-item:hover{
+
+        .list-group-flush>.list-group-item:hover {
             color: whitesmoke;
         }
     </style>
@@ -93,10 +95,9 @@
     <div class="sidebar" style="background-color: rgb(34,46,60);">
         <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse">
             <div class="position-sticky">
-                <div class="list-group list-group-flush mx-3 mt-4" >
+                <div class="list-group list-group-flush mx-3 mt-4">
                     {% if user.groups.first.name == 'admins' or user.groups.first.name == 'inlet_user' %}
-                    <a href="{% url 'inlet_home' %}" class="list-group-item list-group-item-action py-2 ripple"
-                    >
+                    <a href="{% url 'inlet_home' %}" class="list-group-item list-group-item-action py-2 ripple">
                         Inlet Home
                     </a>
                     <a href="{% url 'create_product_index' %}"
@@ -118,33 +119,40 @@
                         class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
                         Management Home
                     </a>
-                    <a href="{% url 'list_batch' %}"
-                        class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+                    <a href="{% url 'list_batch' %}" class="list-group-item list-group-item-action py-2 ripple"
+                        aria-current="true">
                         All Batches
                     </a>
                     <a href="{% url 'inquiry' %}" class="list-group-item list-group-item-action py-2 ripple">
                         Inquiry
                     </a>
-                    <a href="{% url 'outlet_home' %}"
-                        class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
-                        outlet home
+                    <a href="{% url 'api_home' %}" class="list-group-item list-group-item-action py-2 ripple"
+                        aria-current="true">
+                        API
                     </a>
-                    <a href="{% url 'creat_saleorder' %}"
-                        class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
-                        creat_saleorder
+                    {% endif %}
+                    {% if user.groups.first.name == 'admins' or user.groups.first.name == 'outlet_user' %}
+                    <a href="{% url 'outlet_home' %}" class="list-group-item list-group-item-action py-2 ripple"
+                        aria-current="true">
+                        outlet home
                     </a>
                     {% endif %}
                     {% if user.groups.first.name == 'activators' %}
                     <a href="{% url 'list_batch' %}" class="list-group-item list-group-item-action py-2 ripple">
                         List Batches
                     </a>
+                    <!-- <a href="{% url 'admin_only' %}" class="action-link">Admin Only</a> -->
+                    {% endif %}
+                    {% if user.groups.first.name == 'admins' %}
+                    <a href="{% url 'admin_only' %}" class="action-link">Admin Only</a>
                     {% endif %}
                 </div>
             </div>
         </nav>
     </div>
     <!-- Top Navigation Bar -->
-    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top" style="box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.575), 0 2px 10px 0 rgb(0 0 0 / 5%);">
+    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
+        style="box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.575), 0 2px 10px 0 rgb(0 0 0 / 5%);">
         <div class="container-fluid">
             <!-- Toggle button for sidebar -->
             <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#sidebarMenu"
@@ -154,8 +162,7 @@
 
             <!-- Brand/logo -->
             <a class="navbar-brand" href="#">
-                <img src="" height="25" alt=""
-                    loading="lazy"><b>TOOL TRACKING</b>
+                <img src="" height="25" alt="" loading="lazy"><b>TOOL TRACKING</b>
             </a>
 
             <ul class="navbar-nav ms-auto d-flex flex-row">
@@ -173,13 +180,13 @@
                     <a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#"
                         id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <!-- <img src="user_avatar.jpg" class="rounded-circle" -->
-                            <!-- height="22" alt="" loading="lazy"> -->
+                        <!-- height="22" alt="" loading="lazy"> -->
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                         <li class="dropdown-item"> <b> Username :</b> {{ user.username }}</li>
                         <li class="dropdown-item"><b>Email :</b> {{ user.email }}</li>
                         <li class="dropdown-item"><b> Group :</b> {{ user.groups.first.name }}</li>
-                        <li>    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        <li> <a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                     </ul>
                 </li>
 

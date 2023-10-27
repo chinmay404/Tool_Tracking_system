@@ -1,10 +1,116 @@
-
 {% extends 'base.html' %}
 {% block content %}
-<h1>Create Product Index</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create</button>
-</form>
+<div class="container">
+    <h1>Create Product Index</h1>
+    <form method="post" class="form">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.gate_inward_No.label_tag }}
+                    {{ form.gate_inward_No }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.product.label_tag }}
+                    {{ form.product }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.status.label_tag }}
+                    {{ form.status }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.batch_id.label_tag }}
+                    {{ form.batch_id }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.quantity_requested.label_tag }}
+                    {{ form.quantity_requested }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.quantity_received.label_tag }}
+                    {{ form.quantity_received }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.received_by.label_tag }}
+                    {{ form.received_by }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.arrive_date.label_tag }}
+                    {{ form.arrive_date }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.party_challan_no.label_tag }}
+                    {{ form.party_challan_no }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.part_bill_no.label_tag }}
+                    {{ form.part_bill_no }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.part_date.label_tag }}
+                    {{ form.part_date }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.UOM.label_tag }}
+                    {{ form.UOM }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.po_no.label_tag }}
+                    {{ form.po_no }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.rate.label_tag }}
+                    {{ form.rate }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.ammount.label_tag }}
+                    {{ form.ammount }}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
 {% endblock %}

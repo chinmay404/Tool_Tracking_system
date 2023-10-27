@@ -17,6 +17,6 @@ urlpatterns = [
     path('inquiry/', views.inquiry, name='inquiry'),
     path('list_batch/', views.list_batch, name='list_batch'),
     path('api/', include('api.urls')),
-    path('inventory_detail/<int:product_id>/', views.inventory_detail, name='inventory_detail'),
+    path('inventory_detail/<str:product_id>/', views.inventory_detail, name='inventory_detail'),
     
 ]

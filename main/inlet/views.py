@@ -186,8 +186,9 @@ def activation(request):
                     activator_name = request.user.username 
                     activation_date = timezone.now()  
                     current_data = master_product.data_json or {}
-                    current_data['status'] = {
+                    current_data['Activation'] = {
                         'activator_name': activator_name,
+                        'activator_email': request.user.email,
                         'activation_date': activation_date.strftime('%Y-%m-%d %H:%M:%S'),
                         'status_changed_to': 'active',
                     }

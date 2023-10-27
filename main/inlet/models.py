@@ -12,8 +12,9 @@ from django.db.models.signals import pre_save
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    product_id = models.PositiveIntegerField(primary_key=True)
+    product_id = models.CharField(primary_key=True)
     supplier_name = models.CharField(max_length=100)
+    supplier_gstin = models.CharField(max_length=100)
     description = models.TextField()
 
     def __str__(self):
@@ -27,17 +28,21 @@ class ProductIndex(models.Model):
         ('in_progress', 'In Progress'),
         ('dead', 'Dead'),
     ]
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    gate_inward_No = models.CharField(max_length=10)      # Gate Inward No
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)   # Material Name
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
     batch_id = models.UUIDField(default=uuid4, unique=True, editable=False) 
-    quantity_requested = models.PositiveIntegerField()
-    quantity_received = models.PositiveIntegerField()
-    received_by = models.ForeignKey(
-        CustomUser, on_delete=models.SET_NULL, null=True, editable=False)
-    arrive_date = models.DateTimeField(default=timezone.now)
-    # GRN_NO = models.CharField(max_length=255 , null=True)
-    # GRN_NO = models.CharField(max_length=20)
+    quantity_requested = models.PositiveIntegerField() # ChallanQty
+    quantity_received = models.PositiveIntegerField()  # Received Qty
+    received_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, editable=False)
+    arrive_date = models.DateTimeField(default=timezone.now) #Gate Inward date
+    party_challan_no = models.PositiveIntegerField()
+    part_bill_no = models.PositiveIntegerField()
+    part_date = models.DateField()
+    UOM = models.CharField(max_length=10)
+    po_no = models.CharField(max_length=20)
+    rate = models.PositiveIntegerField()
+    ammount = models.PositiveIntegerField()
 
     def __str__(self):
         return f"{self.product.name} Index"
@@ -75,12 +80,22 @@ def add_products_to_master(sender, instance, **kwargs):
         # product_data = instance.product.get_product_data()
         for _ in range(instance.quantity_received):
             master_data = {
-                'productindex_data': {
+                'inlet_data': {
+                    'gate_inward_No': instance.gate_inward_No,
+                    'product_id': instance.product.product_id,  # Assuming Product model has a 'product_id' field
+                    'status': instance.status,
                     'batch_id': str(instance.batch_id),
                     'quantity_requested': instance.quantity_requested,
                     'quantity_received': instance.quantity_received,
                     'received_by': str(received_by),
                     'arrive_date': instance.arrive_date.strftime('%Y-%m-%d %H:%M:%S'),
+                    'party_challan_no': instance.party_challan_no,
+                    'part_bill_no': instance.part_bill_no,
+                    'part_date': instance.part_date.strftime('%Y-%m-%d'),
+                    'UOM': instance.UOM,
+                    'po_no': instance.po_no,
+                    'rate': instance.rate,
+                    'ammount': instance.ammount
                 }
             }
             master_instances.append(Master(

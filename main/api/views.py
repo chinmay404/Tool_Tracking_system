@@ -152,8 +152,8 @@ def activate_master(request, uuid):
 # OUTLET APIS
 
 class CreateOrder(APIView):
-    def post(self, request):
-        serializer = OrderSerializer(data=request.data)
+    def creat_inlet(self, request):
+        serializer = ProductIndexSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
