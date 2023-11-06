@@ -5,7 +5,7 @@ from django.urls import reverse
 class SaleOrderProduct(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
-        ('complet', 'Complete'),
+        ('complete', 'Complete'),
     ]
     
     sale_order = models.ForeignKey('SaleOrder', on_delete=models.CASCADE)
@@ -14,12 +14,13 @@ class SaleOrderProduct(models.Model):
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='pending')
     uuids = models.JSONField(default=list, null=True, blank=True)
+    
 
 
 class SaleOrder(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
-        ('complet', 'Complete'),
+        ('complete', 'Complete'),
     ]
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='pending')

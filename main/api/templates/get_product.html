@@ -19,7 +19,7 @@
 
         /* Add background color based on status */
         .status-row {
-            background-color: {% if data.status == 'active' %} #d1e7dd {% else %} #f8d7da {% endif %};
+            background-color: {% if data.status == 'active' or data.status == 'deactive' %} #d1e7dd {% else %} #f8d7da {% endif %};
         }
     </style>
 </head>
@@ -68,12 +68,7 @@
                         </div>
 
                         <!-- Render the "Activate" button using Bootstrap styling -->
-                        <div class="mt-4 text-center">
-                            {% if data.status != 'active' %}
-                            <a href="{% url 'activate_product' uuid=data.uuid %}"
-                                class="btn btn-success">Activate</a>
-                            {% endif %}
-                        </div>
+                        <!--  -->
                     </div>
                 </div>
             </div>

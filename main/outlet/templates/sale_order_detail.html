@@ -46,18 +46,21 @@
         </thead>
         <tbody>
             {% for sale_order_product in sale_order.saleorderproduct_set.all %}
-            <tr>
+              <tr>
                 <td>
-                    <a href="{% url 'sale_order_product_detail' sale_order.bill_no sale_order_product.product_id %}">
-                        {{ sale_order_product.product.name }}
-                    </a>
+                  <a href="{% url 'sale_order_product_detail' sale_order.bill_no sale_order_product.product_id %}">
+                    {{ sale_order_product.product.name }}
+                  </a>
                 </td>
                 <td>{{ sale_order_product.quantity }}</td>
-                <td>{{ sale_order_product.status }}</td>
+                <td class="{% if sale_order_product.status == 'complete' %}table-success{% else %}table-danger{% endif %}">
+                  {{ sale_order_product.status }}
+                </td>
                 <td>{{ sale_order_product.product_id }}</td>
-            </tr>
+              </tr>
             {% endfor %}
-        </tbody>
+          </tbody>
+          
     </table>
 </div>
 {% endblock %}

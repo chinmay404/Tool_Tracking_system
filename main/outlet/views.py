@@ -31,6 +31,7 @@ def sale_order_detail(request, bill_no):
     total_products_required = sale_order.saleorderproduct_set.aggregate(total_required=Sum('quantity'))['total_required']
     total_products_added = len(sale_order.uuids)
     remaning = total_products_required-total_products_added
+    print(sale_order.products)
     
     context = {
         'sale_order': sale_order,
@@ -52,8 +53,11 @@ def sale_order_product_detail(request, bill_no, sale_order_product_id):
     selected_master_uuids = sale_order_product.uuids
     form = AddUUIDForm(request.POST)
     product = sale_order_product.product
-    
-    return render(request, 'sale_order_product_detail.html', {'sale_order': sale_order, 'sale_order_product': sale_order_product, 'inventory_count': inventory_count, 'selected_master_uuids': selected_master_uuids ,'form': form,'product':product})
+    selected_master_uuids_count = len(selected_master_uuids)
+    if selected_master_uuids_count == sale_order_product.quantity:
+        sale_order_product.status = 'complete'
+        sale_order_product.save()    
+    return render(request, 'sale_order_product_detail.html', {'sale_order': sale_order, 'sale_order_product': sale_order_product, 'inventory_count': inventory_count, 'selected_master_uuids': selected_master_uuids ,'form': form,'product':product,'selected_master_uuids_count':selected_master_uuids_count})
 
 
 @login_required(login_url='managment/login/')
@@ -63,24 +67,24 @@ def add_uuid(request, bill_no, sale_order_product_id):
         new_uuid = request.POST.get('new_uuid')
         sale_order = get_object_or_404(SaleOrder, bill_no=bill_no)
         sale_order_product = get_object_or_404(SaleOrderProduct, product_id=sale_order_product_id, sale_order=sale_order)
+        print(sale_order)
 
-        # Check for duplicate UUIDs in selected_master_uuids
         if new_uuid in sale_order_product.uuids:
             messages.error(request, f"UUID '{new_uuid}' is already in the list.")
             return redirect('sale_order_product_detail', bill_no=bill_no, sale_order_product_id=sale_order_product_id)
 
-        # Check if the new_uuid exists in the Master model for the same product
         matching_master = Master.objects.filter(product=sale_order_product.product, uuid=new_uuid).first()
+
         if not matching_master:
             messages.error(request, f"UUID '{new_uuid}' does not match the product in the sale order.")
-            return redirect('sale_order_product_detail', bill_no=bill_no, sale_order_product_id=sale_order_product_id)
+        elif matching_master.status != 'active':
+            messages.error(request, f"UUID '{new_uuid}' is not active for the product.")
+        else:
+            sale_order_product.uuids.append(new_uuid)
+            sale_order_product.save()
 
-        # Add the new UUID to the selected_master_uuids list
-        sale_order_product.uuids.append(new_uuid)
-        sale_order_product.save()
-
-    # Redirect back to the sale_order_product_detail page
     return redirect('sale_order_product_detail', bill_no=bill_no, sale_order_product_id=sale_order_product_id)
+
 
 
 
@@ -89,6 +93,7 @@ def add_uuid(request, bill_no, sale_order_product_id):
 def save_and_return(request, bill_no, sale_order_product_id):
     sale_order = get_object_or_404(SaleOrder, bill_no=bill_no)
     sale_order_product = get_object_or_404(SaleOrderProduct, id=sale_order_product_id, sale_order=sale_order)
+
     
     appended_data = {
         "added_by": request.user.username,  
@@ -99,7 +104,9 @@ def save_and_return(request, bill_no, sale_order_product_id):
         "po_number": sale_order.po_number,
     }
 
-    for master in sale_order_product.product.master_set.all():
+    for _ in sale_order_product.uuids:
+        master = Master.objects.get(uuid=_)
+        print(master)
         master_data = master.data_json or {}
         outlet_data = master_data.get('outlet', {})  
         outlet_data[bill_no] = appended_data
@@ -110,7 +117,11 @@ def save_and_return(request, bill_no, sale_order_product_id):
         master.save()
         sale_order.uuids.append(str(master.uuid))
     sale_order.save()
-  
+    
+    
+    if sale_order_product.quantity == len(sale_order_product.uuids):
+        sale_order_product.status = 'complete'
+        sale_order_product.save()
     
     return redirect('sale_order_detail', bill_no=bill_no)
 
@@ -129,19 +140,18 @@ def remove_uuid(request, bill_no, sale_order_product_id):
                 master_data = specific_master.data_json or {}
                 outlet_data = master_data.get('outlet', {})
                 
-                # Check if the specific bill_no exists in the outlet data
+
                 if bill_no in outlet_data:
                     del outlet_data[bill_no]
 
-                # Update the outlet data in master data
                 master_data['outlet'] = outlet_data
                 specific_master.data_json = master_data
                 specific_master.status = 'active'
+                if removed_uuid in sale_order.uuids:
+                    sale_order.uuids.remove(removed_uuid)
+                    sale_order.save()
 
-                # Save the specific_master instance
                 print(specific_master.save())
-
-                # Save the sale_order_product to update UUIDs
                 print(sale_order_product.save())
 
     return redirect('sale_order_product_detail', bill_no=bill_no, sale_order_product_id=sale_order_product_id)

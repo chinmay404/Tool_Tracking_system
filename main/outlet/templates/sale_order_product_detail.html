@@ -10,6 +10,7 @@
         <p><strong>Description:</strong> {{ product.description }}</p>
         <p><strong>Requested quantity:</strong> {{ sale_order_product.quantity }}</p>
         <p><strong>Inventory count:</strong> {{ inventory_count }}</p>
+        <p><strong>selected master uuids:</strong> {{ selected_master_uuids }}</p>
 
         <!-- Display the UUIDs in a table -->
         <h3 class="mt-3">UUIDs of Product's Masters:</h3>
@@ -47,6 +48,10 @@
       <div class="alert alert-danger" role="alert">
         Not Enough Material In Inventory
       </div>
+    {% elif selected_master_uuids_count == sale_order_product.quantity %}  
+    <div class="alert alert-success" role="alert">
+      All Material Added
+    </div>
     {% else %}
       <form method="post" action="{% url 'add_uuid' sale_order.bill_no sale_order_product.product_id %}">
         {% csrf_token %}
